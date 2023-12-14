@@ -1,8 +1,7 @@
 package demo.chatapp.user.domain;
 
 import demo.chatapp.exception.BadRequestException;
-import demo.chatapp.exception.UnauthorizedException;
-import demo.chatapp.user.service.vo.SignUpUserRequest;
+import demo.chatapp.user.service.dto.SignUpUserRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -31,7 +31,8 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers("/refresh-token").hasAnyRole("ADMIN", "USER")
-                .requestMatchers("/signup", "/login").permitAll())
+                .requestMatchers("/signup", "/login").permitAll()
+                .requestMatchers("/userinfo").hasAnyRole("ADMIN", "USER"))
             .addFilterBefore(accessTokenValidatorFilter, BasicAuthenticationFilter.class)
             .addFilterBefore(refreshTokenValidatorFilter, AccessTokenValidatorFilter.class)
             .addFilterAfter(tokenGeneratorFilter, BasicAuthenticationFilter.class)

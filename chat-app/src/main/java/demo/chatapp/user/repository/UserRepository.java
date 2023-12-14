@@ -24,4 +24,8 @@ public class UserRepository {
             .getSingleResult();
     }
 
+    public User findById(Long id) {
+        return em.find(User.class, id);
+    }
+
 }

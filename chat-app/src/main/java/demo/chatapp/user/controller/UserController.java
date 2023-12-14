@@ -2,9 +2,11 @@ package demo.chatapp.user.controller;
 
 import static demo.chatapp.security.SecurityConstants.REFRESH_HEADER;
 
+import demo.chatapp.security.principal.UserPrincipal;
 import demo.chatapp.security.repository.TokenRepository;
 import demo.chatapp.user.service.UserService;
-import demo.chatapp.user.service.vo.SignUpUserRequest;
+import demo.chatapp.user.service.dto.SignUpUserRequest;
+import demo.chatapp.user.service.dto.UserInfoResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -12,8 +14,10 @@ import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -43,6 +47,14 @@ public class UserController {
         }
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/userinfo")
+    public ResponseEntity<UserInfoResponse> userInfo(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Long userId = userPrincipal.getId();
+        UserInfoResponse userInfo = userService.getUserInfo(userId);
+        return ResponseEntity.ok(userInfo);
     }
 
     private String getRefTokenFromCookie(HttpServletRequest request) {

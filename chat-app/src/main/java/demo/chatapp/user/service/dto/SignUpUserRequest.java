@@ -1,4 +1,4 @@
-package demo.chatapp.user.service.vo;
+package demo.chatapp.user.service.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
