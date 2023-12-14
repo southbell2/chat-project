@@ -22,4 +22,11 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<Void> login() {
+        return ResponseEntity.ok().build();
+    }
+
+
+
 }

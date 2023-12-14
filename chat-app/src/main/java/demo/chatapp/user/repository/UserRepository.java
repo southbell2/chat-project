@@ -15,4 +15,13 @@ public class UserRepository {
         em.persist(user);
     }
 
+    public User findByEmailWithRole(String email) {
+        return em.createQuery(
+                "SELECT distinct u FROM User u " +
+                    "JOIN FETCH u.userRoles r " +
+                    "WHERE u.email = :email", User.class)
+            .setParameter("email", email)
+            .getSingleResult();
+    }
+
 }

@@ -14,5 +14,14 @@ spring:
     init:
       mode: always
 
+redis:
+  host: localhost
+  port: 6379
+
+jwt:
+  secret-key: jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4
+  token-validity-in-sec: 300
+  refresh-token-validity-in-sec: 604800
+
 logging.level:
   org.hibernate.SQL: debug
