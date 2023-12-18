@@ -32,4 +32,10 @@ public class UserService {
         User user = userRepository.findById(userId);
         return userMapper.userToUserInfoResponse(user);
     }
+
+    @Transactional
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId);
+        userRepository.deleteUser(user);
+    }
 }

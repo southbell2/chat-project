@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,6 +56,14 @@ public class UserController {
         Long userId = userPrincipal.getId();
         UserInfoResponse userInfo = userService.getUserInfo(userId);
         return ResponseEntity.ok(userInfo);
+    }
+
+    @DeleteMapping("/delete-user")
+    public ResponseEntity<Void> deleteUser(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Long userId = userPrincipal.getId();
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().build();
     }
 
     private String getRefTokenFromCookie(HttpServletRequest request) {

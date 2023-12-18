@@ -28,4 +28,10 @@ public class UserRepository {
         return em.find(User.class, id);
     }
 
+    public void deleteUser(User user) {
+        em.createQuery("DELETE FROM User u WHERE u.id = :id")
+            .setParameter("id", user.getId())
+            .executeUpdate();
+    }
+
 }
