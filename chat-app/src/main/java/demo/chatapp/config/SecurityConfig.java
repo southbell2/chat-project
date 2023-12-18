@@ -32,7 +32,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers("/refresh-token").hasAnyRole("ADMIN", "USER")
                 .requestMatchers("/signup", "/login").permitAll()
-                .requestMatchers("/userinfo", "/delete-user").hasAnyRole("ADMIN", "USER"))
+                .requestMatchers("/userinfo", "/delete-user", "/update-userinfo", "/update-password").hasAnyRole("ADMIN", "USER"))
             .addFilterBefore(accessTokenValidatorFilter, BasicAuthenticationFilter.class)
             .addFilterBefore(refreshTokenValidatorFilter, AccessTokenValidatorFilter.class)
             .addFilterAfter(tokenGeneratorFilter, BasicAuthenticationFilter.class)

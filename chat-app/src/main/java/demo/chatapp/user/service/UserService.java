@@ -6,6 +6,8 @@ import demo.chatapp.user.domain.User;
 import demo.chatapp.user.domain.UserRole;
 import demo.chatapp.user.repository.UserRepository;
 import demo.chatapp.user.service.dto.SignUpUserRequest;
+import demo.chatapp.user.service.dto.UpdatePasswordRequest;
+import demo.chatapp.user.service.dto.UpdateUserInfoRequest;
 import demo.chatapp.user.service.dto.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,5 +39,17 @@ public class UserService {
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId);
         userRepository.deleteUser(user);
+    }
+
+    @Transactional
+    public void updateUserInfo(Long userId, UpdateUserInfoRequest userInfoRequest) {
+        User user = userRepository.findById(userId);
+        user.updateUserInfo(userInfoRequest);
+    }
+
+    @Transactional
+    public void updatePassword(Long userId, UpdatePasswordRequest updatePasswordRequest) {
+        User user = userRepository.findById(userId);
+        user.updatePassword(updatePasswordRequest.getNewPassword(), updatePasswordRequest.getNowPassword(), passwordEncoder);
     }
 }

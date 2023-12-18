@@ -6,6 +6,8 @@ import demo.chatapp.security.principal.UserPrincipal;
 import demo.chatapp.security.repository.TokenRepository;
 import demo.chatapp.user.service.UserService;
 import demo.chatapp.user.service.dto.SignUpUserRequest;
+import demo.chatapp.user.service.dto.UpdatePasswordRequest;
+import demo.chatapp.user.service.dto.UpdateUserInfoRequest;
 import demo.chatapp.user.service.dto.UserInfoResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +22,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
@@ -63,7 +66,25 @@ public class UserController {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
         userService.deleteUser(userId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/update-userinfo")
+    public ResponseEntity<Void> updateUserInfo(@RequestBody @Valid UpdateUserInfoRequest userInfoRequest,
+        Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Long userId = userPrincipal.getId();
+        userService.updateUserInfo(userId, userInfoRequest);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/update-password")
+    public ResponseEntity<Void> updatePassword(Authentication authentication, @RequestBody @Valid
+    UpdatePasswordRequest updatePasswordRequest) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Long userId = userPrincipal.getId();
+        userService.updatePassword(userId, updatePasswordRequest);
+        return ResponseEntity.noContent().build();
     }
 
     private String getRefTokenFromCookie(HttpServletRequest request) {

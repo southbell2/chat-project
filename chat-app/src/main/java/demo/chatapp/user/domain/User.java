@@ -1,7 +1,9 @@
 package demo.chatapp.user.domain;
 
 import demo.chatapp.exception.BadRequestException;
+import demo.chatapp.exception.UnauthorizedException;
 import demo.chatapp.user.service.dto.SignUpUserRequest;
+import demo.chatapp.user.service.dto.UpdateUserInfoRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -66,6 +68,17 @@ public class User {
         }
     }
 
+    public void updateUserInfo(UpdateUserInfoRequest userInfoRequest) {
+        setNickname(userInfoRequest.getNickname());
+    }
+
+    public void updatePassword(String newPassword, String nowPassword, PasswordEncoder passwordEncoder) {
+        if (!passwordEncoder.matches(nowPassword, this.password)) {
+            throw new UnauthorizedException("비밀번호가 일치하지 않습니다.");
+        }
+        setPassword(newPassword, passwordEncoder);
+    }
+
     private void setPassword(String password, PasswordEncoder passwordEncoder) {
         if (password == null || password.length() < 4 || 15 < password.length()) {
             throw new BadRequestException("비밀번호가 적절하지 않습니다.");
@@ -80,5 +93,7 @@ public class User {
     private void setEmail(String email) {
         this.email = email;
     }
+
+
 
 }
