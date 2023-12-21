@@ -17,11 +17,15 @@ import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -38,6 +42,8 @@ public class SecurityTest {
     ObjectMapper objectMapper;
     @Autowired
     UserRepository userRepository;
+    @Value("${admin.ip}")
+    private String adminIP;
 
     String testEmail;
     String testNickname;
@@ -145,5 +151,34 @@ public class SecurityTest {
         //then
         assertThat(userInfoResponse.getEmail()).isEqualTo(testEmail);
         assertThat(userInfoResponse.getNickname()).isEqualTo(testNickname);
+    }
+
+    @Test
+    public void ADMIN_회원가입() throws Exception {
+        //given
+        SignUpUserRequest userRequest = new SignUpUserRequest();
+        testEmail = "admin@test.com";
+        testNickname = "admin";
+        testPassword = "12345";
+        userRequest.setEmail(testEmail);
+        userRequest.setNickname(testNickname);
+        userRequest.setPassword(testPassword);
+        byte[] content = objectMapper.writeValueAsBytes(userRequest);
+
+        MockHttpServletRequestBuilder request = post("/admin/register-5f4dcc3b5aa765d61d8327deb882cf99")
+            .with(new RequestPostProcessor() {
+                @Override
+                public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+                    request.setRemoteAddr(adminIP); // 원하는 IP 주소로 설정
+                    request.setContentType("application/json");
+                    request.setContent(content);
+
+                    return request;
+                }
+            });
+
+        //when && then
+        mockMvc.perform(request)
+            .andExpect(status().isCreated());
     }
 }
