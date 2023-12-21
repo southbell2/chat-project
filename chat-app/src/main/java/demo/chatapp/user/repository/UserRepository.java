@@ -28,6 +28,15 @@ public class UserRepository {
         return em.find(User.class, id);
     }
 
+    public User findByIdWithRole(Long id) {
+        return em.createQuery(
+                "SELECT distinct u FROM User u " +
+                    "JOIN FETCH u.userRoles r " +
+                    "WHERE u.id = :id", User.class)
+            .setParameter("id", id)
+            .getSingleResult();
+    }
+
     public void deleteUser(User user) {
         em.createQuery("DELETE FROM User u WHERE u.id = :id")
             .setParameter("id", user.getId())
