@@ -25,3 +25,6 @@ jwt:
 
 logging.level:
   org.hibernate.SQL: debug
+
+admin:
+  ip: 127.0.0.1
