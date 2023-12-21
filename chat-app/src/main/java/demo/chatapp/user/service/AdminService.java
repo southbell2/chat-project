@@ -8,6 +8,7 @@ import demo.chatapp.user.domain.RoleType;
 import demo.chatapp.user.domain.User;
 import demo.chatapp.user.domain.UserRole;
 import demo.chatapp.user.repository.UserRepository;
+import demo.chatapp.user.service.dto.PagedUserResponse;
 import demo.chatapp.user.service.dto.SignUpUserRequest;
 import demo.chatapp.user.service.dto.UserInfoAdminResponse;
 import java.util.List;
@@ -40,5 +41,17 @@ public class AdminService {
             .map(UserRole::getRole)
             .toList();
         return userMapper.userToUserInfoAdminResponse(user, roles);
+    }
+
+    public List<PagedUserResponse> getPagedUsers(Long beforeId, Integer limit) {
+        List<User> pagedUsers = userRepository.findPagedUsers(beforeId, limit);
+        return pagedUsers.stream()
+            .map(pagedUser -> {
+                List<RoleType> roles = pagedUser.getUserRoles().stream()
+                    .map(UserRole::getRole)
+                    .toList();
+                return userMapper.userToPagedUserResponse(pagedUser, roles);
+            })
+            .toList();
     }
 }

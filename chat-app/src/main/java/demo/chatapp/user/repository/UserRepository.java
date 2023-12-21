@@ -2,6 +2,7 @@ package demo.chatapp.user.repository;
 
 import demo.chatapp.user.domain.User;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -41,6 +42,17 @@ public class UserRepository {
         em.createQuery("DELETE FROM User u WHERE u.id = :id")
             .setParameter("id", user.getId())
             .executeUpdate();
+    }
+
+    public List<User> findPagedUsers(Long beforeId, Integer limit) {
+        return em.createQuery(
+                "SELECT u FROM User u " +
+                    "WHERE u.id < :id " +
+                    "ORDER BY u.id DESC", User.class)
+            .setFirstResult(0)
+            .setMaxResults(limit)
+            .setParameter("id", beforeId)
+            .getResultList();
     }
 
 }

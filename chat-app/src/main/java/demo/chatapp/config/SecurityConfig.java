@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .requestMatchers("/signup", "/login").permitAll()
                 .requestMatchers("/userinfo", "/delete-user", "/update-userinfo", "/update-password").hasAnyRole("ADMIN", "USER")
                 .requestMatchers("/admin/register-5f4dcc3b5aa765d61d8327deb882cf99").access(ipAuthorizationManager)
-                .requestMatchers("/admin/userinfo/*").hasRole("ADMIN"))
+                .requestMatchers("/admin/userinfo/*", "/admin/userinfo-list").hasRole("ADMIN"))
             .addFilterBefore(accessTokenValidatorFilter, BasicAuthenticationFilter.class)
             .addFilterBefore(refreshTokenValidatorFilter, AccessTokenValidatorFilter.class)
             .addFilterAfter(tokenGeneratorFilter, BasicAuthenticationFilter.class)
