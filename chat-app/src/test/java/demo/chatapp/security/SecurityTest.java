@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import demo.chatapp.config.EmbeddedRedisConfig;
 import demo.chatapp.user.repository.UserRepository;
 import demo.chatapp.user.service.UserService;
 import demo.chatapp.user.service.dto.SignUpUserRequest;
