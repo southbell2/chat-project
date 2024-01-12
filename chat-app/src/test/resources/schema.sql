@@ -12,3 +12,10 @@ CREATE TABLE IF NOT EXISTS user_role (
   role VARCHAR(50) CHECK (role IN ('ROLE_ADMIN', 'ROLE_USER')),
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS channels (
+  channel_id BIGINT PRIMARY KEY,
+  created_at TIMESTAMP DEFAULT NOW(),
+  master_id BIGINT NOT NULL,
+  title VARCHAR(30) NOT NULL
+);

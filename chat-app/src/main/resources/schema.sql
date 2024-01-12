@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(50) NOT NULL UNIQUE,
   password VARCHAR(100) NOT NULL,
   nickname CHAR(10) NOT NULL UNIQUE,
-  created_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMP DEFAULT NOW(),
+  INDEX email_idx (email)
 );
 
 CREATE TABLE IF NOT EXISTS user_role (

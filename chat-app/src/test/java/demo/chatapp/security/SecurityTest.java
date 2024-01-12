@@ -40,8 +40,6 @@ public class SecurityTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
-    @Autowired
-    UserRepository userRepository;
     @Value("${admin.ip}")
     private String adminIP;
 
