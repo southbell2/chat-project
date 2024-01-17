@@ -52,8 +52,16 @@ dependencies {
 	// jpa 쿼리 로그
 	implementation group: 'com.github.gavlyukovskiy', name: 'p6spy-spring-boot-starter', version: '1.9.0'
 
+	//mapstruct
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+	//spring data cassandra
+	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-cassandra
+	implementation group: 'org.springframework.data', name: 'spring-data-cassandra', version: '4.2.2'
+	// https://mvnrepository.com/artifact/com.datastax.oss/java-driver-core
+	//implementation group: 'com.datastax.oss', name: 'java-driver-core', version: '4.17.0'
+
 }
 
 tasks.named('test') {
