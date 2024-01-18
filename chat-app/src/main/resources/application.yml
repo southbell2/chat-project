@@ -13,13 +13,7 @@ spring:
   sql:
     init:
       mode: always
-#  data:
-#    cassandra:
-#      contact-point: 127.0.0.1
-#      port: 9042
-#      local-datacenter: datacenter1
-#      keyspace-name: chat
-#      schema-action: none
+
 
 redis:
   host: localhost
@@ -35,3 +29,9 @@ logging.level:
 
 admin:
   ip: 127.0.0.1
+
+cassandra:
+  contact-point: 127.0.0.1
+  port: 9042
+  local-datacenter: datacenter1
+  keyspace: chat

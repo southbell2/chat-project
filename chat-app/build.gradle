@@ -59,8 +59,16 @@ dependencies {
 	//spring data cassandra
 	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-cassandra
 	implementation group: 'org.springframework.data', name: 'spring-data-cassandra', version: '4.2.2'
-	// https://mvnrepository.com/artifact/com.datastax.oss/java-driver-core
-	//implementation group: 'com.datastax.oss', name: 'java-driver-core', version: '4.17.0'
+
+	//test containers
+	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.19.3'
+	testImplementation group: 'org.testcontainers', name: 'cassandra', version: '1.19.3'
+	testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.19.3'
+
+	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
+	implementation group: 'org.springframework.data', name: 'spring-data-commons', version: '3.2.1'
+
+
 
 }
 
