@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.0'
-	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.springframework.boot' version '3.1.1'
+	id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'demo'
@@ -58,7 +58,7 @@ dependencies {
 
 	//spring data cassandra
 	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-cassandra
-	implementation group: 'org.springframework.data', name: 'spring-data-cassandra', version: '4.2.2'
+	implementation group: 'org.springframework.data', name: 'spring-data-cassandra', version: '4.1.2'
 
 	//test containers
 	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.19.3'
@@ -66,7 +66,8 @@ dependencies {
 	testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.19.3'
 
 	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
-	implementation group: 'org.springframework.data', name: 'spring-data-commons', version: '3.2.1'
+	implementation group: 'org.springframework.data', name: 'spring-data-commons', version: '3.1.2'
+
 
 
 
@@ -75,3 +76,6 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+

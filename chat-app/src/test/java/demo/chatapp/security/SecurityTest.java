@@ -2,15 +2,14 @@ package demo.chatapp.security;
 
 import static demo.chatapp.security.SecurityConstants.ACCESS_HEADER;
 import static demo.chatapp.security.SecurityConstants.REFRESH_HEADER;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import demo.chatapp.config.EmbeddedRedisConfig;
-import demo.chatapp.user.repository.UserRepository;
+import demo.chatapp.AbstractContainerEnv;
 import demo.chatapp.user.service.UserService;
 import demo.chatapp.user.service.dto.SignUpUserRequest;
 import demo.chatapp.user.service.dto.UserInfoResponse;
@@ -19,21 +18,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
 @Transactional
-@ActiveProfiles("test")
-@AutoConfigureMockMvc(addFilters = true)
-public class SecurityTest {
+public class SecurityTest extends AbstractContainerEnv {
 
     @Autowired
     UserService userService;

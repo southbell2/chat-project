@@ -2,65 +2,40 @@ package demo.chatapp.channel.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
-import org.junit.jupiter.api.BeforeAll;
+import demo.chatapp.AbstractContainerEnv;
+import demo.chatapp.channel.domain.Message;
+import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.CassandraContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@SpringBootTest
-@Testcontainers
-@ActiveProfiles("test")
-class MessageRepositoryTest {
 
-    private static final String KEYSPACE_NAME = "test";
+class MessageRepositoryTest extends AbstractContainerEnv {
 
-    @Container
-    private static final CassandraContainer<?> cassandra = new CassandraContainer<>("cassandra:4.1.3")
-        .withExposedPorts(9042);
+    @Autowired
+    MessageRepository messageRepository;
 
-    @DynamicPropertySource
-    static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("cassandra.contact-point", cassandra::getHost);
-        registry.add("cassandra.local-datacenter", () -> "datacenter1");
-        registry.add("cassandra.port", () -> cassandra.getMappedPort(9042));
-        registry.add("cassandra.keyspace", () -> KEYSPACE_NAME);
-        registry.add("spring.data.cassandra.schema-action", () -> "create-if-not-exists");
-    }
-
-    @BeforeAll
-    static void setupCassandraConnectionProperties() {
-        createKeyspace(cassandra.getCluster());
-    }
-
-    private static void createKeyspace(Cluster cluster) {
-        try (Session session = cluster.connect()) {
-            session.execute("CREATE KEYSPACE IF NOT EXISTS " + KEYSPACE_NAME +
-                " WITH replication = \n" +
-                "{'class':'SimpleStrategy','replication_factor':'1'};");
-            session.execute(
-                """
-                    CREATE TABLE IF NOT EXISTS test.messages (
-                    channel_id bigint,\s
-                    bucket int,\s
-                    message_id bigint,\s
-                    nickname text,\s
-                    content text,\s
-                    created_at timestamp,\s
-                    PRIMARY KEY ((channel_id, bucket), message_id)) WITH CLUSTERING ORDER BY (message_id DESC)"""
-            );
-
-        }
-    }
 
     @Test
-    void cassandraContainerRunningTest() {
-        assertThat(cassandra.isRunning()).isTrue();
+    void 메세지_읽어오기_테스트() {
+        //given
+        Long channelId = 1L;
+        Integer bucket = 1;
+        Message message1 = Message.createMessage(channelId, bucket, 1L, "kim", "first");
+        Message message2 = Message.createMessage(channelId, bucket, 2L, "kim", "second");
+        Message message3 = Message.createMessage(channelId, bucket, 3L, "kim", "third");
+        Message message4 = Message.createMessage(channelId, bucket, 4L, "kim", "fourth");
+        Message message5 = Message.createMessage(channelId, bucket, 5L, "kim", "fifth");
+        messageRepository.save(message1);
+        messageRepository.save(message2);
+        messageRepository.save(message3);
+        messageRepository.save(message4);
+        messageRepository.save(message5);
+
+        //when
+        List<Message> messages = messageRepository.findMessages(channelId, bucket, 4L, 2);
+
+        //then
+        assertThat(messages.get(0).getMessageKey().getMessageId()).isEqualTo(3L);
+        assertThat(messages.get(1).getMessageKey().getMessageId()).isEqualTo(2L);
     }
 }
