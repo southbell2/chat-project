@@ -13,4 +13,5 @@ public class JoinChannelResponse {
     private String title;
     private LocalDateTime createdAt;
     private List<String> entryNicknames = new ArrayList<>();
+    private List<MessageResponse> messages = new ArrayList<>();
 }

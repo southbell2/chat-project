@@ -23,6 +23,7 @@ public class ChannelController {
         Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long masterId = userPrincipal.getId();
+
         channelService.createChannel(title, masterId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -32,6 +33,7 @@ public class ChannelController {
         Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
+
         JoinChannelResponse joinChannelResponse = channelService.joinChannel(channelId, userId);
         return ResponseEntity.ok(joinChannelResponse);
     }

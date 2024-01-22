@@ -16,8 +16,8 @@ public class IdGenerator {
     private static final long maxNodeId = (1L << NODE_ID_BITS) - 1;
     private static final long maxSequence = (1L << SEQUENCE_BITS) - 1;
 
-    // Custom Epoch (January 1, 2015, Midnight UTC = 2015-01-01T00:00:00Z)
-    private static final long DEFAULT_CUSTOM_EPOCH = 1420070400000L;
+    // 2024년 1월 1일 0시 0분 0초
+    private static final long DEFAULT_CUSTOM_EPOCH = 1704034800000L;
 
     private final long nodeId;
     private final long customEpoch;
@@ -58,6 +58,17 @@ public class IdGenerator {
         return id;
     }
 
+    public long[] parse(long id) {
+        long maskNodeId = ((1L << NODE_ID_BITS) - 1) << SEQUENCE_BITS;
+        long maskSequence = (1L << SEQUENCE_BITS) - 1;
+
+        long timestamp = (id >> (NODE_ID_BITS + SEQUENCE_BITS)) + customEpoch;
+        long nodeId = (id & maskNodeId) >> SEQUENCE_BITS;
+        long sequence = id & maskSequence;
+
+        return new long[]{timestamp, nodeId, sequence};
+    }
+
 
     // Get current timestamp in milliseconds, adjust for the custom epoch.
     private long timestamp() {
@@ -92,17 +103,6 @@ public class IdGenerator {
         }
         nodeId = nodeId & maxNodeId;
         return nodeId;
-    }
-
-    public long[] parse(long id) {
-        long maskNodeId = ((1L << NODE_ID_BITS) - 1) << SEQUENCE_BITS;
-        long maskSequence = (1L << SEQUENCE_BITS) - 1;
-
-        long timestamp = (id >> (NODE_ID_BITS + SEQUENCE_BITS)) + customEpoch;
-        long nodeId = (id & maskNodeId) >> SEQUENCE_BITS;
-        long sequence = id & maskSequence;
-
-        return new long[]{timestamp, nodeId, sequence};
     }
 
     @Override
