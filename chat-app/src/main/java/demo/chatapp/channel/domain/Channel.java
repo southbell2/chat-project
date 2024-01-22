@@ -35,7 +35,7 @@ public class Channel {
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "master_id")
     private User user;
 
     @OneToMany(mappedBy = "channel")

@@ -19,7 +19,7 @@ public class ChannelRepository {
         return em.createQuery(
                 "SELECT DISTINCT c FROM Channel c"
                     + " JOIN FETCH c.entries e"
-                    + " JOIN FETCH e.user"
+                    + " JOIN FETCH e.user u"
                     + " WHERE c.id = :id", Channel.class)
             .setParameter("id", id)
             .getSingleResult();

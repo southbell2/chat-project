@@ -2,26 +2,15 @@ package demo.chatapp;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.CassandraContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest
 @Testcontainers
-@TestInstance(Lifecycle.PER_CLASS)
-@ActiveProfiles("test")
-@AutoConfigureMockMvc(addFilters = true)  //embedded redis port 충돌 때문에 추가
 public abstract class AbstractContainerEnv {
 
     public static final String KEYSPACE_NAME = "test";
-    @Container
     public static CassandraContainer<?> cassandra = new CassandraContainer<>("cassandra:4.1.3")
         .withExposedPorts(9042);
 
@@ -53,7 +42,7 @@ public abstract class AbstractContainerEnv {
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
         registry.add("cassandra.contact-point", cassandra::getHost);
-        registry.add("cassandra.local-datacenter", () -> "datacenter1");
+        registry.add("cassandra.local-datacenter", () -> cassandra.getLocalDatacenter());
         registry.add("cassandra.port", () -> cassandra.getMappedPort(9042));
         registry.add("cassandra.keyspace", () -> KEYSPACE_NAME);
     }

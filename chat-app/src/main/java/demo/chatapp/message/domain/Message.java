@@ -1,4 +1,4 @@
-package demo.chatapp.channel.domain;
+package demo.chatapp.message.domain;
 
 
 import java.time.LocalDateTime;

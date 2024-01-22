@@ -1,6 +1,6 @@
-package demo.chatapp.channel;
+package demo.chatapp.message;
 
-import demo.chatapp.channel.domain.Message;
+import demo.chatapp.message.domain.Message;
 import demo.chatapp.channel.service.dto.MessageResponse;
 import org.mapstruct.Mapper;
 
