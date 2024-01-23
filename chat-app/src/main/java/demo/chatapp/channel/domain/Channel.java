@@ -16,13 +16,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.data.domain.Persistable;
 
 @Entity
 @Table(name = "channels")
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Channel {
+public class Channel implements Persistable<Long> {
 
     @Id
     @Column(name = "channel_id")
@@ -61,4 +62,8 @@ public class Channel {
         this.user = user;
     }
 
+    @Override
+    public boolean isNew() {
+        return createdAt == null;
+    }
 }

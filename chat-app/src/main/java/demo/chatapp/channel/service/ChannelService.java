@@ -47,7 +47,7 @@ public class ChannelService {
         long id = idGenerator.nextId();
         User user = userRepository.findById(masterId).orElseThrow();
         Channel channel = Channel.createChannel(id, title, user);
-        channelRepository.saveChannel(channel);
+        channelRepository.save(channel);
 
         //채널을 만든 유저가 채널 입장
         makeEntry(channel, user);
@@ -57,7 +57,7 @@ public class ChannelService {
 
     @Transactional
     public JoinChannelResponse joinChannel(Long channelId, Long userId) {
-        Channel channel = channelRepository.findByIdWithEntriesWithUser(channelId);
+        Channel channel = channelRepository.findByIdWithEntriesWithUser(channelId).orElseThrow();
         User user = userRepository.findById(userId).orElseThrow();
 
         //entry(채널에 입장한 회원 기록) 저장

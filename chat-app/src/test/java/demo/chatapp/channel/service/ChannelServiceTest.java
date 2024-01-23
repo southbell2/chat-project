@@ -94,7 +94,7 @@ class ChannelServiceTest extends AbstractContainerEnv{
         long channelId = channelService.createChannel(title, masterId);
         em.flush();
         em.clear();
-        Channel channel = channelRepository.findByIdWithEntriesWithUser(channelId);
+        Channel channel = channelRepository.findByIdWithEntriesWithUser(channelId).get();
 
 
         //then
