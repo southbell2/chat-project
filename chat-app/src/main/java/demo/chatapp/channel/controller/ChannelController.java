@@ -2,15 +2,19 @@ package demo.chatapp.channel.controller;
 
 import demo.chatapp.channel.service.ChannelService;
 import demo.chatapp.channel.service.dto.JoinChannelResponse;
+import demo.chatapp.channel.service.dto.MessageResponse;
 import demo.chatapp.security.principal.UserPrincipal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,6 +40,13 @@ public class ChannelController {
 
         JoinChannelResponse joinChannelResponse = channelService.joinChannel(channelId, userId);
         return ResponseEntity.ok(joinChannelResponse);
+    }
+
+    @GetMapping("/channel/{channelId}")
+    public ResponseEntity<List<MessageResponse>> readMoreMessage(@PathVariable Long channelId,
+        @RequestParam Long standardMessageId) {
+        List<MessageResponse> messageResponses = channelService.getMessages(channelId, standardMessageId);
+        return ResponseEntity.ok(messageResponses);
     }
 
 }

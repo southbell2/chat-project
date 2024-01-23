@@ -50,8 +50,7 @@ public class ChannelService {
         channelRepository.saveChannel(channel);
 
         //채널을 만든 유저가 채널 입장
-        Entry entry = Entry.createEntry(channel, user);
-        entryRepository.saveEntry(entry);
+        makeEntry(channel, user);
 
         return id;
     }
@@ -61,34 +60,56 @@ public class ChannelService {
         Channel channel = channelRepository.findByIdWithEntriesWithUser(channelId);
         User user = userRepository.findById(userId);
 
-        System.out.println("channel entry size = " + channel.getEntries().size());
-
         //entry(채널에 입장한 회원 기록) 저장
-        Entry entry = Entry.createEntry(channel, user);
-        entryRepository.saveEntry(entry);
+        makeEntry(channel, user);
 
         //채널 입장시 읽어 올 메세지 데이터
+        List<MessageResponse> messageResponses = getMessageResponses(
+            channelId, Long.MAX_VALUE, 20);
+
+        return getJoinChannelResponse(
+            channel, user, messageResponses);
+    }
+
+    public List<MessageResponse> getMessages(Long channelId, Long standardMessageId) {
+        return getMessageResponses(channelId, standardMessageId, 20);
+    }
+
+    private void makeEntry(Channel channel, User user) {
+        Entry entry = Entry.createEntry(channel, user);
+        entryRepository.saveEntry(entry);
+    }
+
+
+    private List<MessageResponse> getMessageResponses(Long channelId, Long standardMessageId,
+        Integer limit) {
         int bucket = getBucket(channelId);
-        List<Message> messages = messageRepository.findMessages(channelId, bucket, Long.MAX_VALUE,
-            20);
-        List<MessageResponse> messageResponses = messages.stream()
+        List<Message> messages = messageRepository.findMessages(channelId, bucket,
+            standardMessageId,
+            limit);
+        return messages.stream()
             .map(messageMapper::messageToMessageResponse).toList();
-
-        //채널에 입장한 회원에게 데이터 전달하기
-        JoinChannelResponse joinChannelResponse = new JoinChannelResponse();
-        joinChannelResponse.setTitle(channel.getTitle());
-        joinChannelResponse.setCreatedAt(channel.getCreatedAt());
-        channel.getEntries()    //기존 채팅방 유저의 닉네임 추가
-            .forEach(e -> joinChannelResponse.getEntryNicknames().add(e.getUser().getNickname()));
-        joinChannelResponse.getEntryNicknames().add(user.getNickname());    //현재 채팅방 입장한 유저의 닉네임 추가
-        joinChannelResponse.setMessages(messageResponses);
-
-        return joinChannelResponse;
     }
 
     private int getBucket(Long channelId) {
         long[] parsingId = idGenerator.parse(channelId);
         return Bucket.calculateBucket(parsingId[0]);
+    }
+
+
+    private JoinChannelResponse getJoinChannelResponse(Channel channel, User user,
+        List<MessageResponse> messageResponses) {
+        JoinChannelResponse joinChannelResponse = new JoinChannelResponse();
+        joinChannelResponse.setTitle(channel.getTitle());
+        joinChannelResponse.setCreatedAt(channel.getCreatedAt());
+
+        channel.getEntries()    //기존 채팅방 유저의 닉네임 추가
+            .forEach(e -> joinChannelResponse.getEntryNicknames().add(e.getUser().getNickname()));
+        joinChannelResponse.getEntryNicknames().add(user.getNickname());    //현재 채팅방 입장한 유저의 닉네임 추가
+
+        joinChannelResponse.setMessages(messageResponses);
+
+        return joinChannelResponse;
     }
 
 }
