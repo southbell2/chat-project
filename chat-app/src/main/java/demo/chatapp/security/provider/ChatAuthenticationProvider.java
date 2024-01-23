@@ -36,7 +36,7 @@ public class ChatAuthenticationProvider implements AuthenticationProvider {
         String rawPassword = authentication.getCredentials().toString();
         User user;
         try {
-            user = userRepository.findByEmailWithRole(email);
+            user = userRepository.findByEmailWithRole(email).orElseThrow(() -> new EmptyResultDataAccessException(1));
         } catch (EmptyResultDataAccessException e) {
             log.info("이메일로 회원을 찾을 수 없습니다 , email = {}", email);
             throw new BadCredentialsException("이메일 또는 비밀번호가 일치하지 않습니다.");

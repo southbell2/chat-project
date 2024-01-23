@@ -12,6 +12,7 @@ import demo.chatapp.user.service.dto.UpdatePasswordRequest;
 import demo.chatapp.user.service.dto.UpdateUserInfoRequest;
 import demo.chatapp.user.service.dto.UserInfoResponse;
 import jakarta.persistence.EntityManager;
+import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -48,7 +49,7 @@ class UserServiceTest extends AbstractContainerEnv {
 
         //When
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         //Then
         assertThat(user.getEmail()).isEqualTo(email);
@@ -81,7 +82,7 @@ class UserServiceTest extends AbstractContainerEnv {
         userRequest.setNickname(nickname);
         userRequest.setPassword("12345");
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         //when
         UserInfoResponse userInfo = userService.getUserInfo(user.getId());
@@ -97,8 +98,8 @@ class UserServiceTest extends AbstractContainerEnv {
         Long id = 1L;
 
         //when && then
-        assertThat(userService.getUserInfo(id)).isNull();
-
+        assertThatThrownBy(() -> userService.getUserInfo(id))
+            .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
@@ -111,7 +112,7 @@ class UserServiceTest extends AbstractContainerEnv {
         userRequest.setNickname(nickname);
         userRequest.setPassword("12345");
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         nickname = "Spring";
         UpdateUserInfoRequest userInfoRequest = new UpdateUserInfoRequest();
@@ -136,7 +137,7 @@ class UserServiceTest extends AbstractContainerEnv {
         userRequest.setNickname(nickname);
         userRequest.setPassword(nowPassword);
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         String newPassword = "qwerasdf";
         UpdatePasswordRequest passwordRequest = new UpdatePasswordRequest();
@@ -161,7 +162,7 @@ class UserServiceTest extends AbstractContainerEnv {
         userRequest.setNickname(nickname);
         userRequest.setPassword(nowPassword);
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         //현재 비밀번호를 틀린 비밀번호로 입력
         String newPassword = "qwerasdf";
@@ -184,7 +185,7 @@ class UserServiceTest extends AbstractContainerEnv {
         userRequest.setNickname(nickname);
         userRequest.setPassword("12345");
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         //when
         userService.deleteUser(user.getId());
@@ -192,6 +193,7 @@ class UserServiceTest extends AbstractContainerEnv {
         em.clear();
 
         //then
-        assertThat(userService.getUserInfo(user.getId())).isNull();
+        assertThatThrownBy(() -> userService.getUserInfo(user.getId()))
+            .isInstanceOf(NoSuchElementException.class);
     }
 }

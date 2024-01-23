@@ -85,7 +85,7 @@ class ChannelServiceTest extends AbstractContainerEnv{
     public void 채널_만들기() throws InterruptedException {
         //given
         String title = "test channel";
-        User user = userRepository.findByEmailWithRole(testEmail);
+        User user = userRepository.findByEmailWithRole(testEmail).get();
         Long masterId = user.getId();
         long smallerId = idGenerator.nextId();
         Thread.sleep(100L);
@@ -107,7 +107,7 @@ class ChannelServiceTest extends AbstractContainerEnv{
         //given
         //먼저 채팅방 만들기
         String title = "test channel";
-        User user = userRepository.findByEmailWithRole(testEmail);
+        User user = userRepository.findByEmailWithRole(testEmail).get();
         Long masterId = user.getId();
         long channelId = channelService.createChannel(title, masterId);
 
@@ -122,7 +122,7 @@ class ChannelServiceTest extends AbstractContainerEnv{
         messageRepository.save(message3);
 
         //방에 입장할 유저 객체
-        User joinUser = userRepository.findByEmailWithRole(joinEmail);
+        User joinUser = userRepository.findByEmailWithRole(joinEmail).get();
         em.flush();
         em.clear();
 

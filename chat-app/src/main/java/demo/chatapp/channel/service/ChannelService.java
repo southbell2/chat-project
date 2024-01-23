@@ -1,16 +1,16 @@
 package demo.chatapp.channel.service;
 
 import demo.chatapp.IdGenerator;
-import demo.chatapp.message.MessageMapper;
 import demo.chatapp.channel.domain.Bucket;
 import demo.chatapp.channel.domain.Channel;
 import demo.chatapp.channel.domain.Entry;
-import demo.chatapp.message.domain.Message;
 import demo.chatapp.channel.repository.ChannelRepository;
 import demo.chatapp.channel.repository.EntryRepository;
-import demo.chatapp.message.repository.MessageRepository;
 import demo.chatapp.channel.service.dto.JoinChannelResponse;
 import demo.chatapp.channel.service.dto.MessageResponse;
+import demo.chatapp.message.MessageMapper;
+import demo.chatapp.message.domain.Message;
+import demo.chatapp.message.repository.MessageRepository;
 import demo.chatapp.user.domain.User;
 import demo.chatapp.user.repository.UserRepository;
 import java.util.List;
@@ -45,7 +45,7 @@ public class ChannelService {
     public long createChannel(String title, Long masterId) {
         //채널 생성
         long id = idGenerator.nextId();
-        User user = userRepository.findById(masterId);
+        User user = userRepository.findById(masterId).orElseThrow();
         Channel channel = Channel.createChannel(id, title, user);
         channelRepository.saveChannel(channel);
 
@@ -58,7 +58,7 @@ public class ChannelService {
     @Transactional
     public JoinChannelResponse joinChannel(Long channelId, Long userId) {
         Channel channel = channelRepository.findByIdWithEntriesWithUser(channelId);
-        User user = userRepository.findById(userId);
+        User user = userRepository.findById(userId).orElseThrow();
 
         //entry(채널에 입장한 회원 기록) 저장
         makeEntry(channel, user);
