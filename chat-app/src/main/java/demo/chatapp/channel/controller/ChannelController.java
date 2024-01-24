@@ -1,6 +1,7 @@
 package demo.chatapp.channel.controller;
 
 import demo.chatapp.channel.service.ChannelService;
+import demo.chatapp.channel.service.dto.ChannelInfoResponse;
 import demo.chatapp.channel.service.dto.JoinChannelResponse;
 import demo.chatapp.channel.service.dto.MessageResponse;
 import demo.chatapp.security.principal.UserPrincipal;
@@ -54,9 +55,20 @@ public class ChannelController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/channel")
+    public ResponseEntity<List<ChannelInfoResponse>> getChannelInfo(@RequestParam(defaultValue = "0") long standardId,
+        @RequestParam(defaultValue = "10") int limit) {
+        standardId = convertIfDefaultId(standardId);
+        List<ChannelInfoResponse> channelInfoResponses = channelService.getChannelInfo(standardId, limit);
+        return ResponseEntity.ok(channelInfoResponses);
+    }
+
     private Long getUserIdFromAuthentication(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         return userPrincipal.getId();
     }
 
+    private long convertIfDefaultId(long standardId) {
+        return (standardId == 0) ? Long.MAX_VALUE : standardId;
+    }
 }

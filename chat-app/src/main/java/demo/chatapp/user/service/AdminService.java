@@ -55,7 +55,6 @@ public class AdminService {
                     .map(UserRole::getRole)
                     .toList();
                 return userMapper.userToPagedUserResponse(pagedUser, roles);
-            })
-            .toList();
+            }).toList();
     }
 }

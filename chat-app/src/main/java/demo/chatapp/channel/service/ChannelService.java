@@ -6,6 +6,7 @@ import demo.chatapp.channel.domain.Channel;
 import demo.chatapp.channel.domain.Entry;
 import demo.chatapp.channel.repository.ChannelRepository;
 import demo.chatapp.channel.repository.EntryRepository;
+import demo.chatapp.channel.service.dto.ChannelInfoResponse;
 import demo.chatapp.channel.service.dto.JoinChannelResponse;
 import demo.chatapp.channel.service.dto.MessageResponse;
 import demo.chatapp.message.MessageMapper;
@@ -15,6 +16,10 @@ import demo.chatapp.user.domain.User;
 import demo.chatapp.user.repository.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,6 +92,16 @@ public class ChannelService {
         }
     }
 
+    public List<ChannelInfoResponse> getChannelInfo(long standardId, int limit) {
+        PageRequest pageRequest = PageRequest.of(0, limit, Sort.by(Direction.DESC, "id"));
+        List<Channel> channels = channelRepository.findChannelsByIdWithUser(standardId,
+            pageRequest);
+
+        return channels.stream()
+            .map(this::channelToChannelInfoResponse)
+            .toList();
+    }
+
     private void makeEntry(Channel channel, User user) {
         Entry entry = Entry.createEntry(channel, user);
         entryRepository.saveEntry(channel.getId(), user.getId());
@@ -110,7 +125,6 @@ public class ChannelService {
         return Bucket.calculateBucket(parsingId[0]);
     }
 
-
     private JoinChannelResponse getJoinChannelResponse(Channel channel, User user,
         List<MessageResponse> messageResponses) {
         JoinChannelResponse joinChannelResponse = new JoinChannelResponse();
@@ -124,6 +138,15 @@ public class ChannelService {
         joinChannelResponse.setMessages(messageResponses);
 
         return joinChannelResponse;
+    }
+
+    private ChannelInfoResponse channelToChannelInfoResponse(Channel channel) {
+        ChannelInfoResponse channelInfoResponse = new ChannelInfoResponse();
+        channelInfoResponse.setCreatedAt(channel.getCreatedAt());
+        channelInfoResponse.setMasterNickname(channel.getUser().getNickname());
+        channelInfoResponse.setTotalCount(channel.getTotalCount());
+        channelInfoResponse.setTitle(channel.getTitle());
+        return channelInfoResponse;
     }
 
 }
