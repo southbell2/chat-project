@@ -2,6 +2,7 @@ package demo.chatapp.channel.repository;
 
 import demo.chatapp.channel.domain.Entry;
 import demo.chatapp.channel.domain.EntryKey;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,4 +15,12 @@ public interface EntryRepository extends JpaRepository<Entry, EntryKey> {
         + " WHERE e.entryKey.channel.id = :channelId AND e.entryKey.user.id = :userId")
     void deleteByChannelIdAndUserId(@Param("channelId") Long channelId,
         @Param("userId") Long userId);
+
+    @Query("SELECT e FROM Entry e WHERE e.entryKey.channel.id = :channelId AND e.entryKey.user.id = :userId")
+    Optional<Entry> findByChannelIdAndUserId(@Param("channelId") Long channelId,
+        @Param("userId") Long userId);
+
+    @Modifying
+    @Query(value = "INSERT INTO entries (channel_id, user_id) VALUES (:channelId, :userId)", nativeQuery = true)
+    void saveEntry(@Param("channelId") Long channelId, @Param("userId") Long userId);
 }

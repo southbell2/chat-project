@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS channels (
   created_at TIMESTAMP DEFAULT NOW(),
   master_id BIGINT NOT NULL,
   title VARCHAR(30) NOT NULL,
-  total_count INT
+  total_count INT DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS entries (

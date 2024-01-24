@@ -89,7 +89,7 @@ public class ChannelService {
 
     private void makeEntry(Channel channel, User user) {
         Entry entry = Entry.createEntry(channel, user);
-        entryRepository.save(entry);
+        entryRepository.saveEntry(channel.getId(), user.getId());
         channel.getEntries().add(entry);
         channelRepository.updateTotalCount(1, channel.getId());
     }

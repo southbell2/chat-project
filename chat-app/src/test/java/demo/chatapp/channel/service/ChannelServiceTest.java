@@ -7,7 +7,9 @@ import demo.chatapp.AbstractContainerEnv;
 import demo.chatapp.IdGenerator;
 import demo.chatapp.channel.domain.Bucket;
 import demo.chatapp.channel.domain.Channel;
+import demo.chatapp.channel.domain.Entry;
 import demo.chatapp.channel.repository.ChannelRepository;
+import demo.chatapp.channel.repository.EntryRepository;
 import demo.chatapp.channel.service.dto.JoinChannelResponse;
 import demo.chatapp.message.domain.Message;
 import demo.chatapp.message.repository.MessageRepository;
@@ -17,6 +19,7 @@ import demo.chatapp.user.service.UserService;
 import demo.chatapp.user.service.dto.SignUpUserRequest;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,6 +57,8 @@ class ChannelServiceTest extends AbstractContainerEnv{
     String joinEmail;
     String joinNickname;
     String joinPassword;
+    @Autowired
+    private EntryRepository entryRepository;
 
     @BeforeEach
     public void setUp() {
@@ -158,6 +163,66 @@ class ChannelServiceTest extends AbstractContainerEnv{
         //then
         assertThat(messages.get(0).getMessageKey().getMessageId()).isEqualTo(3L);
         assertThat(messages.get(1).getMessageKey().getMessageId()).isEqualTo(2L);
+    }
+
+    @Test
+    void 채널나가기_한명있는경우() {
+        //given
+        //채팅방 만들기
+        String title = "test channel";
+        User user = userRepository.findByEmailWithRole(testEmail).get();
+        Long masterId = user.getId();
+        long channelId = channelService.createChannel(title, masterId);
+        em.flush();
+        em.clear();
+
+        //when
+        channelService.leaveChannel(channelId, masterId);
+        em.flush();
+        em.clear();
+
+        //then
+        Optional<Entry> entryOptional = entryRepository.findByChannelIdAndUserId(channelId,
+            masterId);
+        assertThat(entryOptional.isEmpty()).isTrue();
+
+        Optional<Channel> channelOptional = channelRepository.findById(masterId);
+        assertThat(channelOptional.isEmpty()).isTrue();
+    }
+
+    @Test
+    void 채널나나기_두명있는경우() {
+        //given
+        //채팅방 만들기
+        String title = "test channel";
+        User user = userRepository.findByEmailWithRole(testEmail).get();
+        Long masterId = user.getId();
+        long channelId = channelService.createChannel(title, masterId);
+        em.flush();
+        em.clear();
+
+        //채팅방 입장
+        User joinUser = userRepository.findByEmailWithRole(joinEmail).get();
+        channelService.joinChannel(channelId, joinUser.getId());
+        em.flush();
+        em.clear();
+
+        //when
+        channelService.leaveChannel(channelId, masterId);
+        em.flush();
+        em.clear();
+
+        //then
+        Optional<Entry> masterOptional = entryRepository.findByChannelIdAndUserId(channelId,
+            masterId);
+        Optional<Entry> joinOptional = entryRepository.findByChannelIdAndUserId(channelId,
+            joinUser.getId());
+        assertThat(masterOptional.isEmpty()).isTrue();
+        assertThat(joinOptional.isPresent()).isTrue();
+
+        Channel channel = channelRepository.findById(channelId).get();
+        assertThat(channel.getTotalCount()).isEqualTo(1);
+
     }
 }
 
