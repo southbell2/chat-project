@@ -1,57 +1,52 @@
 package demo.chatapp.channel.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import demo.chatapp.user.domain.User;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.data.domain.Persistable;
 
 @Entity
 @Table(name = "entries")
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Entry {
+@EqualsAndHashCode(of = "entryKey")
+public class Entry implements Persistable<EntryKey> {
 
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(name = "channel_id")
-    private Channel channel;
-
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(name = "user_id")
-    private User user;
+    @EmbeddedId
+    private EntryKey entryKey;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT NOW()")
     private LocalDateTime joinedAt;
 
     public static Entry createEntry(Channel channel, User user) {
+        EntryKey key = new EntryKey(channel, user);
         Entry entry = new Entry();
-        entry.setChannel(channel);
-        entry.setUser(user);
+        entry.setEntryKey(key);
         return entry;
     }
 
-    private void setChannel(Channel channel) {
-        Objects.requireNonNull(channel, "Channel 객체는 null이 될 수 없습니다.");
-        this.channel = channel;
+    private void setEntryKey(EntryKey entryKey) {
+        Objects.requireNonNull(entryKey, "EntryKey는 null이 될 수 없습니다.");
+        this.entryKey = entryKey;
     }
 
-    private void setUser(User user) {
-        Objects.requireNonNull(user, "User 객체는 null이 될 수 없습니다.");
-        this.user = user;
+    @Override
+    public EntryKey getId() {
+        return entryKey;
+    }
+
+    @Override
+    public boolean isNew() {
+        return joinedAt == null;
     }
 }

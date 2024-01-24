@@ -10,7 +10,7 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
 
     @Query("SELECT DISTINCT c FROM Channel c"
         + " JOIN FETCH c.entries e"
-        + " JOIN FETCH e.user u"
+        + " JOIN FETCH e.entryKey.user u"
         + " WHERE c.id = :id")
     Optional<Channel> findByIdWithEntriesWithUser(@Param("id") Long id);
 }

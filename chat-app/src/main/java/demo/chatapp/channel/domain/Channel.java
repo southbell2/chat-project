@@ -12,7 +12,9 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Persistable;
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "id")
 public class Channel implements Persistable<Long> {
 
     @Id
@@ -39,10 +42,10 @@ public class Channel implements Persistable<Long> {
     @JoinColumn(name = "master_id")
     private User user;
 
-    @OneToMany(mappedBy = "channel")
+    @OneToMany(mappedBy = "entryKey.channel")
     private List<Entry> entries = new ArrayList<>();
 
-    public static Channel createChannel(long id, String title, User user) {
+    public static Channel createChannel(Long id, String title, User user) {
         Channel channel = new Channel();
         channel.setId(id);
         channel.setTitle(title);
@@ -50,7 +53,8 @@ public class Channel implements Persistable<Long> {
         return channel;
     }
 
-    private void setId(long id) {
+    private void setId(Long id) {
+        Objects.requireNonNull(id, "Channel id는 null이 될 수 없습니다.");
         this.id = id;
     }
 
@@ -66,4 +70,6 @@ public class Channel implements Persistable<Long> {
     public boolean isNew() {
         return createdAt == null;
     }
+
+
 }

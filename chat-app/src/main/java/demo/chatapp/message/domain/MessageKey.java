@@ -1,5 +1,6 @@
 package demo.chatapp.message.domain;
 
+import java.io.Serializable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -13,7 +14,7 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 @EqualsAndHashCode(exclude = "bucket")
 @Getter
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class MessageKey {
+public class MessageKey implements Serializable {
 
     @PrimaryKeyColumn(
         name = "channel_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED

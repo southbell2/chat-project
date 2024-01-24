@@ -1,17 +1,9 @@
 package demo.chatapp.channel.repository;
 
 import demo.chatapp.channel.domain.Entry;
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import demo.chatapp.channel.domain.EntryKey;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-@RequiredArgsConstructor
-public class EntryRepository {
+public interface EntryRepository extends JpaRepository<Entry, EntryKey> {
 
-    private final EntityManager em;
-
-    public void saveEntry(Entry entry) {
-        em.persist(entry);
-    }
 }

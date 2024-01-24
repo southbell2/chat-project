@@ -77,7 +77,8 @@ public class ChannelService {
 
     private void makeEntry(Channel channel, User user) {
         Entry entry = Entry.createEntry(channel, user);
-        entryRepository.saveEntry(entry);
+        entryRepository.save(entry);
+        channel.getEntries().add(entry);
     }
 
 
@@ -103,9 +104,9 @@ public class ChannelService {
         joinChannelResponse.setTitle(channel.getTitle());
         joinChannelResponse.setCreatedAt(channel.getCreatedAt());
 
-        channel.getEntries()    //기존 채팅방 유저의 닉네임 추가
-            .forEach(e -> joinChannelResponse.getEntryNicknames().add(e.getUser().getNickname()));
-        joinChannelResponse.getEntryNicknames().add(user.getNickname());    //현재 채팅방 입장한 유저의 닉네임 추가
+        channel.getEntries()
+            .forEach(e -> joinChannelResponse.getEntryNicknames()
+                .add(e.getEntryKey().getUser().getNickname()));
 
         joinChannelResponse.setMessages(messageResponses);
 

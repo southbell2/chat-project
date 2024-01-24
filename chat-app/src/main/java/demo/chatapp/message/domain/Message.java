@@ -4,6 +4,7 @@ package demo.chatapp.message.domain;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.cassandra.core.mapping.Column;
@@ -13,6 +14,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Table(value = "messages")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "messageKey")
 public class Message {
 
     @PrimaryKey
