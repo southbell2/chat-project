@@ -75,10 +75,23 @@ public class ChannelService {
         return getMessageResponses(channelId, standardMessageId, 20);
     }
 
+    @Transactional
+    public void leaveChannel(Long channelId, Long userId) {
+        entryRepository.deleteByChannelIdAndUserId(channelId, userId);
+        Channel channel = channelRepository.findById(channelId).orElseThrow();
+        //현재 남은 방의 인원이 혼자 밖에 없으면 채널을 삭제하고 그게 아닐시 인원수를 1 줄인다.
+        if (channel.getTotalCount() <= 1) {
+            channelRepository.delete(channel);
+        } else {
+            channelRepository.updateTotalCount(-1, channelId);
+        }
+    }
+
     private void makeEntry(Channel channel, User user) {
         Entry entry = Entry.createEntry(channel, user);
         entryRepository.save(entry);
         channel.getEntries().add(entry);
+        channelRepository.updateTotalCount(1, channel.getId());
     }
 
 

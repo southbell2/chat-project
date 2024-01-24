@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS channels (
   channel_id BIGINT PRIMARY KEY,
   created_at TIMESTAMP DEFAULT NOW(),
   master_id BIGINT NOT NULL,
-  title VARCHAR(30) NOT NULL
+  title VARCHAR(30) NOT NULL,
+  total_count INT
 );
 
 CREATE TABLE IF NOT EXISTS entries (

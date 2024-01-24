@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +26,7 @@ public class ChannelController {
     @PostMapping("/channel")
     public ResponseEntity<Void> createChannel(@RequestBody String title,
         Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Long masterId = userPrincipal.getId();
-
+        Long masterId = getUserIdFromAuthentication(authentication);
         channelService.createChannel(title, masterId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -35,9 +34,7 @@ public class ChannelController {
     @PostMapping("/channel/{channelId}")
     public ResponseEntity<JoinChannelResponse> joinChannel(@PathVariable Long channelId,
         Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Long userId = userPrincipal.getId();
-
+        Long userId = getUserIdFromAuthentication(authentication);
         JoinChannelResponse joinChannelResponse = channelService.joinChannel(channelId, userId);
         return ResponseEntity.ok(joinChannelResponse);
     }
@@ -47,6 +44,19 @@ public class ChannelController {
         @RequestParam Long standardMessageId) {
         List<MessageResponse> messageResponses = channelService.getMessages(channelId, standardMessageId);
         return ResponseEntity.ok(messageResponses);
+    }
+
+    @DeleteMapping("/channel/{channelId}")
+    public ResponseEntity<Void> leaveChannel(@PathVariable Long channelId,
+        Authentication authentication) {
+        Long userId = getUserIdFromAuthentication(authentication);
+        channelService.leaveChannel(channelId, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    private Long getUserIdFromAuthentication(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        return userPrincipal.getId();
     }
 
 }

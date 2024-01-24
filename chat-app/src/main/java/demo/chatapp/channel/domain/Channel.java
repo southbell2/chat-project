@@ -38,6 +38,9 @@ public class Channel implements Persistable<Long> {
     @Column(columnDefinition = "VARCHAR(30) NOT NULL")
     private String title;
 
+    @Column(name = "total_count")
+    private Integer totalCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "master_id")
     private User user;
