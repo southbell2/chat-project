@@ -63,6 +63,16 @@ public class ChannelController {
         return ResponseEntity.ok(channelInfoResponses);
     }
 
+    @GetMapping("/my-channel")
+    public ResponseEntity<List<ChannelInfoResponse>> getMyChannelInfo(
+        @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int limit,
+        Authentication authentication) {
+        Long userId = getUserIdFromAuthentication(authentication);
+        List<ChannelInfoResponse> myChannelInfo = channelService.getMyChannelInfo(userId, page,
+            limit);
+        return ResponseEntity.ok(myChannelInfo);
+    }
+
     private Long getUserIdFromAuthentication(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         return userPrincipal.getId();

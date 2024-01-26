@@ -14,10 +14,10 @@ import demo.chatapp.message.domain.Message;
 import demo.chatapp.message.repository.MessageRepository;
 import demo.chatapp.user.domain.User;
 import demo.chatapp.user.repository.UserRepository;
+import java.time.ZoneId;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -102,6 +102,23 @@ public class ChannelService {
             .toList();
     }
 
+    public List<ChannelInfoResponse> getMyChannelInfo(Long userId, int page, int limit) {
+        PageRequest pageRequest = PageRequest.of(page, limit);
+        List<Entry> entries = entryRepository.findEntriesByUserIdWithChannelWithUser(
+            userId, pageRequest).getContent();
+
+        //채널에 최근에 입장한 순서대로 정렬
+        entries.sort((e1, e2) -> {
+            long e1Epoch = e1.getJoinedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            long e2Epoch = e2.getJoinedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            return (e1Epoch < e2Epoch) ? 1 : -1;
+        });
+
+        return entries.stream()
+            .map(this::entryToChannelInfoResponse)
+            .toList();
+    }
+
     private void makeEntry(Channel channel, User user) {
         Entry entry = Entry.createEntry(channel, user);
         entryRepository.saveEntry(channel.getId(), user.getId());
@@ -147,6 +164,11 @@ public class ChannelService {
         channelInfoResponse.setTotalCount(channel.getTotalCount());
         channelInfoResponse.setTitle(channel.getTitle());
         return channelInfoResponse;
+    }
+
+    private ChannelInfoResponse entryToChannelInfoResponse(Entry entry) {
+        Channel channel = entry.getEntryKey().getChannel();
+        return channelToChannelInfoResponse(channel);
     }
 
 }

@@ -20,7 +20,7 @@ import org.springframework.data.domain.Persistable;
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "entryKey")
-public class Entry implements Persistable<EntryKey> {
+public class Entry {
 
     @EmbeddedId
     private EntryKey entryKey;
@@ -40,13 +40,4 @@ public class Entry implements Persistable<EntryKey> {
         this.entryKey = entryKey;
     }
 
-    @Override
-    public EntryKey getId() {
-        return entryKey;
-    }
-
-    @Override
-    public boolean isNew() {
-        return joinedAt == null;
-    }
 }
