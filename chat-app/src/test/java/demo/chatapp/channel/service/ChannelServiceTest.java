@@ -10,6 +10,7 @@ import demo.chatapp.channel.domain.Channel;
 import demo.chatapp.channel.domain.Entry;
 import demo.chatapp.channel.repository.ChannelRepository;
 import demo.chatapp.channel.repository.EntryRepository;
+import demo.chatapp.channel.service.dto.ChannelInfoResponse;
 import demo.chatapp.channel.service.dto.JoinChannelResponse;
 import demo.chatapp.message.domain.Message;
 import demo.chatapp.message.repository.MessageRepository;
@@ -34,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = true)
-class ChannelServiceTest extends AbstractContainerEnv{
+class ChannelServiceTest extends AbstractContainerEnv {
 
     @Autowired
     ChannelService channelService;
@@ -100,7 +101,6 @@ class ChannelServiceTest extends AbstractContainerEnv{
         em.flush();
         em.clear();
         Channel channel = channelRepository.findByIdWithEntriesWithUser(channelId).get();
-
 
         //then
         assertThat(channelId).isGreaterThan(smallerId);
@@ -222,6 +222,27 @@ class ChannelServiceTest extends AbstractContainerEnv{
 
         Channel channel = channelRepository.findById(channelId).get();
         assertThat(channel.getTotalCount()).isEqualTo(1);
+
+    }
+
+    @Test
+    void 채널_목록_보기() {
+        //given
+        User user = userRepository.findByEmailWithRole(testEmail).get();
+        //채널 5개 만들기
+        channelService.createChannel("channel1", user.getId());
+        channelService.createChannel("channel2", user.getId());
+        channelService.createChannel("channel3", user.getId());
+        long channelId = channelService.createChannel("channel4", user.getId());
+        channelService.createChannel("channel5", user.getId());
+
+        //when
+        List<ChannelInfoResponse> channelInfo = channelService.getChannelInfo(channelId, 2);
+
+        //then
+        assertThat(channelInfo.size()).isEqualTo(2);
+        assertThat(channelInfo.get(0).getTitle()).isEqualTo("channel3");
+        assertThat(channelInfo.get(1).getTitle()).isEqualTo("channel2");
 
     }
 }
