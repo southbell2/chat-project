@@ -2,14 +2,14 @@ package demo.chatapp.security;
 
 import static demo.chatapp.security.SecurityConstants.ACCESS_HEADER;
 import static demo.chatapp.security.SecurityConstants.REFRESH_HEADER;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import demo.chatapp.user.repository.UserRepository;
+import demo.chatapp.AbstractContainerEnv;
 import demo.chatapp.user.service.UserService;
 import demo.chatapp.user.service.dto.SignUpUserRequest;
 import demo.chatapp.user.service.dto.UserInfoResponse;
@@ -28,11 +28,11 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
 @Transactional
+@SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = true)
-public class SecurityTest {
+public class SecurityTest extends AbstractContainerEnv {
 
     @Autowired
     UserService userService;
@@ -40,8 +40,6 @@ public class SecurityTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
-    @Autowired
-    UserRepository userRepository;
     @Value("${admin.ip}")
     private String adminIP;
 

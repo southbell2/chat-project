@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.0'
-	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.springframework.boot' version '3.1.1'
+	id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'demo'
@@ -52,10 +52,30 @@ dependencies {
 	// jpa 쿼리 로그
 	implementation group: 'com.github.gavlyukovskiy', name: 'p6spy-spring-boot-starter', version: '1.9.0'
 
+	//mapstruct
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+	//spring data cassandra
+	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-cassandra
+	implementation group: 'org.springframework.data', name: 'spring-data-cassandra', version: '4.1.2'
+
+	//test containers
+	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.19.3'
+	testImplementation group: 'org.testcontainers', name: 'cassandra', version: '1.19.3'
+	testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.19.3'
+
+	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
+	implementation group: 'org.springframework.data', name: 'spring-data-commons', version: '3.1.2'
+
+
+
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+

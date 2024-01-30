@@ -55,16 +55,14 @@ public class UserController {
 
     @GetMapping("/userinfo")
     public ResponseEntity<UserInfoResponse> userInfo(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Long userId = userPrincipal.getId();
+        Long userId = getUserIdFromAuthentication(authentication);
         UserInfoResponse userInfo = userService.getUserInfo(userId);
         return ResponseEntity.ok(userInfo);
     }
 
     @DeleteMapping("/delete-user")
     public ResponseEntity<Void> deleteUser(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Long userId = userPrincipal.getId();
+        Long userId = getUserIdFromAuthentication(authentication);
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
@@ -72,8 +70,7 @@ public class UserController {
     @PutMapping("/update-userinfo")
     public ResponseEntity<Void> updateUserInfo(@RequestBody @Valid UpdateUserInfoRequest userInfoRequest,
         Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Long userId = userPrincipal.getId();
+        Long userId = getUserIdFromAuthentication(authentication);
         userService.updateUserInfo(userId, userInfoRequest);
         return ResponseEntity.noContent().build();
     }
@@ -81,10 +78,14 @@ public class UserController {
     @PutMapping("/update-password")
     public ResponseEntity<Void> updatePassword(Authentication authentication, @RequestBody @Valid
     UpdatePasswordRequest updatePasswordRequest) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Long userId = userPrincipal.getId();
+        Long userId = getUserIdFromAuthentication(authentication);
         userService.updatePassword(userId, updatePasswordRequest);
         return ResponseEntity.noContent().build();
+    }
+
+    private Long getUserIdFromAuthentication(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        return userPrincipal.getId();
     }
 
     private String getRefTokenFromCookie(HttpServletRequest request) {

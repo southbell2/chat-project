@@ -3,6 +3,7 @@ package demo.chatapp.user.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import demo.chatapp.AbstractContainerEnv;
 import demo.chatapp.exception.UnauthorizedException;
 import demo.chatapp.user.domain.User;
 import demo.chatapp.user.repository.UserRepository;
@@ -11,6 +12,7 @@ import demo.chatapp.user.service.dto.UpdatePasswordRequest;
 import demo.chatapp.user.service.dto.UpdateUserInfoRequest;
 import demo.chatapp.user.service.dto.UserInfoResponse;
 import jakarta.persistence.EntityManager;
+import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,11 +22,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
 @Transactional
+@SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = true)
-class UserServiceTest {
+class UserServiceTest extends AbstractContainerEnv {
 
     @Autowired
     UserService userService;
@@ -47,7 +49,7 @@ class UserServiceTest {
 
         //When
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         //Then
         assertThat(user.getEmail()).isEqualTo(email);
@@ -80,7 +82,7 @@ class UserServiceTest {
         userRequest.setNickname(nickname);
         userRequest.setPassword("12345");
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         //when
         UserInfoResponse userInfo = userService.getUserInfo(user.getId());
@@ -96,8 +98,8 @@ class UserServiceTest {
         Long id = 1L;
 
         //when && then
-        assertThat(userService.getUserInfo(id)).isNull();
-
+        assertThatThrownBy(() -> userService.getUserInfo(id))
+            .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
@@ -110,7 +112,7 @@ class UserServiceTest {
         userRequest.setNickname(nickname);
         userRequest.setPassword("12345");
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         nickname = "Spring";
         UpdateUserInfoRequest userInfoRequest = new UpdateUserInfoRequest();
@@ -135,7 +137,7 @@ class UserServiceTest {
         userRequest.setNickname(nickname);
         userRequest.setPassword(nowPassword);
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         String newPassword = "qwerasdf";
         UpdatePasswordRequest passwordRequest = new UpdatePasswordRequest();
@@ -160,7 +162,7 @@ class UserServiceTest {
         userRequest.setNickname(nickname);
         userRequest.setPassword(nowPassword);
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         //현재 비밀번호를 틀린 비밀번호로 입력
         String newPassword = "qwerasdf";
@@ -183,7 +185,7 @@ class UserServiceTest {
         userRequest.setNickname(nickname);
         userRequest.setPassword("12345");
         userService.signUp(userRequest);
-        User user = userRepository.findByEmailWithRole(email);
+        User user = userRepository.findByEmailWithRole(email).get();
 
         //when
         userService.deleteUser(user.getId());
@@ -191,6 +193,7 @@ class UserServiceTest {
         em.clear();
 
         //then
-        assertThat(userService.getUserInfo(user.getId())).isNull();
+        assertThatThrownBy(() -> userService.getUserInfo(user.getId()))
+            .isInstanceOf(NoSuchElementException.class);
     }
 }

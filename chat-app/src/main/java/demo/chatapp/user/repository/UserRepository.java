@@ -1,58 +1,22 @@
 package demo.chatapp.user.repository;
 
 import demo.chatapp.user.domain.User;
-import jakarta.persistence.EntityManager;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import java.util.Optional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-@Repository
-@RequiredArgsConstructor
-public class UserRepository {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    private final EntityManager em;
+    @Query("SELECT distinct u FROM User u JOIN FETCH u.userRoles r WHERE u.email = :email")
+    Optional<User> findByEmailWithRole(@Param("email") String email);
 
-    public void saveUser(User user) {
-        em.persist(user);
-    }
+    @Query("SELECT distinct u FROM User u JOIN FETCH u.userRoles r WHERE u.id = :id")
+    Optional<User> findByIdWithRole(@Param("id") Long id);
 
-    public User findByEmailWithRole(String email) {
-        return em.createQuery(
-                "SELECT distinct u FROM User u " +
-                    "JOIN FETCH u.userRoles r " +
-                    "WHERE u.email = :email", User.class)
-            .setParameter("email", email)
-            .getSingleResult();
-    }
+    List<User> findByIdLessThan(Long id, Pageable pageable);
 
-    public User findById(Long id) {
-        return em.find(User.class, id);
-    }
-
-    public User findByIdWithRole(Long id) {
-        return em.createQuery(
-                "SELECT distinct u FROM User u " +
-                    "JOIN FETCH u.userRoles r " +
-                    "WHERE u.id = :id", User.class)
-            .setParameter("id", id)
-            .getSingleResult();
-    }
-
-    public void deleteUser(User user) {
-        em.createQuery("DELETE FROM User u WHERE u.id = :id")
-            .setParameter("id", user.getId())
-            .executeUpdate();
-    }
-
-    public List<User> findPagedUsers(Long beforeId, Integer limit) {
-        return em.createQuery(
-                "SELECT u FROM User u " +
-                    "WHERE u.id < :id " +
-                    "ORDER BY u.id DESC", User.class)
-            .setFirstResult(0)
-            .setMaxResults(limit)
-            .setParameter("id", beforeId)
-            .getResultList();
-    }
-
+    void deleteById(Long id);
 }

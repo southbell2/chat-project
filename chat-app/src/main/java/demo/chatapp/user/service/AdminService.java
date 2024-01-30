@@ -13,6 +13,9 @@ import demo.chatapp.user.service.dto.SignUpUserRequest;
 import demo.chatapp.user.service.dto.UserInfoAdminResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,11 +35,11 @@ public class AdminService {
         UserRole adminRole = new UserRole(ROLE_ADMIN);
 
         User user = User.createUser(userRequest, passwordEncoder, userRole, adminRole);
-        userRepository.saveUser(user);
+        userRepository.save(user);
     }
 
     public UserInfoAdminResponse getUserInfoByAdmin(Long userId) {
-        User user = userRepository.findByIdWithRole(userId);
+        User user = userRepository.findByIdWithRole(userId).orElseThrow();
         List<RoleType> roles = user.getUserRoles().stream()
             .map(UserRole::getRole)
             .toList();
@@ -44,14 +47,14 @@ public class AdminService {
     }
 
     public List<PagedUserResponse> getPagedUsers(Long beforeId, Integer limit) {
-        List<User> pagedUsers = userRepository.findPagedUsers(beforeId, limit);
+        PageRequest pageRequest = PageRequest.of(0, limit, Sort.by(Direction.DESC, "id"));
+        List<User> pagedUsers = userRepository.findByIdLessThan(beforeId, pageRequest);
         return pagedUsers.stream()
             .map(pagedUser -> {
                 List<RoleType> roles = pagedUser.getUserRoles().stream()
                     .map(UserRole::getRole)
                     .toList();
                 return userMapper.userToPagedUserResponse(pagedUser, roles);
-            })
-            .toList();
+            }).toList();
     }
 }

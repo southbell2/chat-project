@@ -13,6 +13,7 @@ spring:
     init:
       mode: always
 
+
 logging.level:
   org.hibernate.SQL: debug
 
@@ -23,7 +24,7 @@ jwt:
 
 redis:
   host: localhost
-  port: 6379
+  port: 6378
 
 admin:
   ip: 127.0.0.1
