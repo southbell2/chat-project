@@ -245,5 +245,33 @@ class ChannelServiceTest extends AbstractContainerEnv {
         assertThat(channelInfo.get(1).getTitle()).isEqualTo("channel2");
 
     }
+
+    @Test
+    void 내가_입장한_채널목록보기() {
+        //given
+        User createUser = userRepository.findByEmailWithRole(testEmail).get();
+        long channel2 = channelService.createChannel("channel2", createUser.getId());
+        long channel1 = channelService.createChannel("channel1", createUser.getId());
+        long channel5 = channelService.createChannel("channel5", createUser.getId());
+        long channel3 = channelService.createChannel("channel3", createUser.getId());
+        long channel4 = channelService.createChannel("channel4", createUser.getId());
+
+        //1,2,3,4,5 순서대로 채널에 입장
+        User joinUser = userRepository.findByEmailWithRole(joinEmail).get();
+        channelService.joinChannel(channel1, joinUser.getId());
+        channelService.joinChannel(channel2, joinUser.getId());
+        channelService.joinChannel(channel3, joinUser.getId());
+        channelService.joinChannel(channel4, joinUser.getId());
+        channelService.joinChannel(channel5, joinUser.getId());
+
+        //when
+        List<ChannelInfoResponse> myChannelInfo = channelService.getMyChannelInfo(joinUser.getId(),
+            1, 2);
+
+        //then
+        assertThat(myChannelInfo.size()).isEqualTo(2);
+        assertThat(myChannelInfo.get(0).getTitle()).isEqualTo("channel3");
+        assertThat(myChannelInfo.get(1).getTitle()).isEqualTo("channel2");
+    }
 }
 

@@ -103,16 +103,10 @@ public class ChannelService {
     }
 
     public List<ChannelInfoResponse> getMyChannelInfo(Long userId, int page, int limit) {
-        PageRequest pageRequest = PageRequest.of(page, limit);
+        //채널에 최근에 입장한 순서대로 정렬
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Direction.DESC, "joinedAt"));
         List<Entry> entries = entryRepository.findEntriesByUserIdWithChannelWithUser(
             userId, pageRequest).getContent();
-
-        //채널에 최근에 입장한 순서대로 정렬
-        entries.sort((e1, e2) -> {
-            long e1Epoch = e1.getJoinedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-            long e2Epoch = e2.getJoinedAt().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-            return (e1Epoch < e2Epoch) ? 1 : -1;
-        });
 
         return entries.stream()
             .map(this::entryToChannelInfoResponse)
