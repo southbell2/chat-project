@@ -11,4 +11,7 @@ public class Bucket {
         timestamp -= DEFAULT_CUSTOM_EPOCH;
         return (int) (timestamp / UNIT_EPOCH);
     }
+
+    private Bucket() {
+    }
 }

@@ -14,6 +14,7 @@ public class ChatMessage {
 
     private Long channelId;
     private String nickname;
-    private String message;
+    private String content;
+    private MessageType messageType;
     private LocalDateTime createdAt;
 }

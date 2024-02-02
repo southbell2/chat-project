@@ -1,20 +1,32 @@
 package demo.message.message;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
 public class MessageController {
-
-    private final SimpMessageSendingOperations template;
+    private final MessageService messageService;
 
     @MessageMapping("/send")
     public void sendMessage(@Payload ChatMessage chatMessage) {
+        chatMessage.setCreatedAt(LocalDateTime.now());
+    }
+
+    @MessageMapping("/join")
+    public void joinChannel(@Payload ChatMessage chatMessage) {
+        Objects.requireNonNull(chatMessage, "chatMessage는 null이면 안 됩니다.");
+        createJoinMessage(chatMessage);
+        messageService.joinChannel(chatMessage);
+    }
+
+    private void createJoinMessage(ChatMessage chatMessage) {
+        chatMessage.setMessageType(MessageType.JOIN);
+        chatMessage.setContent(chatMessage.getNickname() + "님이 입장하셨습니다.");
         chatMessage.setCreatedAt(LocalDateTime.now());
     }
 

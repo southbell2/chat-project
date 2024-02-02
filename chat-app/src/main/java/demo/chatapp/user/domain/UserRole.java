@@ -13,13 +13,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.ToString.Exclude;
 
 @Entity
 @Table(name = "user_role")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "id")
+@ToString
 public class UserRole {
 
     @Id
@@ -29,6 +34,7 @@ public class UserRole {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @Exclude
     private User user;
 
     @Enumerated(EnumType.STRING)
