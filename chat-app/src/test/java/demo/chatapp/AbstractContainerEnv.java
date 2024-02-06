@@ -5,12 +5,14 @@ import com.datastax.driver.core.Session;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.CassandraContainer;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
 public abstract class AbstractContainerEnv {
 
-    public static final String KEYSPACE_NAME = "test";
+    private static final String KEYSPACE_NAME = "test";
     public static CassandraContainer<?> cassandra = new CassandraContainer<>("cassandra:4.1.3")
         .withExposedPorts(9042);
 
@@ -42,7 +44,7 @@ public abstract class AbstractContainerEnv {
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
         registry.add("cassandra.contact-point", cassandra::getHost);
-        registry.add("cassandra.local-datacenter", () -> cassandra.getLocalDatacenter());
+        registry.add("cassandra.local-datacenter", cassandra::getLocalDatacenter);
         registry.add("cassandra.port", () -> cassandra.getMappedPort(9042));
         registry.add("cassandra.keyspace", () -> KEYSPACE_NAME);
     }

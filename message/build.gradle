@@ -29,6 +29,9 @@ dependencies {
 	// jackson-databind
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.16.1'
 
+	// testcontainers
+	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.19.3'
+	testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.19.3'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
