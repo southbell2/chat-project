@@ -94,4 +94,6 @@ public class MessageTest extends AbstractContainerEnv {
         assertThat(retMessage.getNickname()).isEqualTo(nickname1);
         assertThat(retMessage.getContent()).isEqualTo(retMessage.getNickname() + "님이 입장하셨습니다.");
     }
+
+    
 }

@@ -24,9 +24,22 @@ public class MessageController {
         messageService.joinChannel(chatMessage);
     }
 
+    @MessageMapping("/leave")
+    public void leaveChannel(@Payload ChatMessage chatMessage) {
+        Objects.requireNonNull(chatMessage, "chatMessage는 null이면 안 됩니다.");
+        createLeaveMessage(chatMessage);
+        messageService.leaveChannel(chatMessage);
+    }
+
     private void createJoinMessage(ChatMessage chatMessage) {
         chatMessage.setMessageType(MessageType.JOIN);
         chatMessage.setContent(chatMessage.getNickname() + "님이 입장하셨습니다.");
+        chatMessage.setCreatedAt(LocalDateTime.now());
+    }
+
+    private void createLeaveMessage(ChatMessage chatMessage) {
+        chatMessage.setMessageType(MessageType.LEAVE);
+        chatMessage.setContent(chatMessage.getNickname() + "님이 퇴장하셨습니다.");
         chatMessage.setCreatedAt(LocalDateTime.now());
     }
 

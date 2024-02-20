@@ -17,7 +17,7 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
         + " WHERE c.id = :id")
     Optional<Channel> findByIdWithEntriesWithUser(@Param("id") Long id);
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE Channel c SET c.totalCount = c.totalCount + :value WHERE c.id = :id")
     void updateTotalCount(@Param("value") Integer value, @Param("id") Long id);
 

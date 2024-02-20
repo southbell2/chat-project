@@ -14,7 +14,6 @@ import demo.chatapp.message.domain.Message;
 import demo.chatapp.message.repository.MessageRepository;
 import demo.chatapp.user.domain.User;
 import demo.chatapp.user.repository.UserRepository;
-import java.time.ZoneId;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
