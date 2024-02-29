@@ -15,6 +15,8 @@ public class MessageController {
     @MessageMapping("/send")
     public void sendMessage(@Payload ChatMessage chatMessage) {
         chatMessage.setCreatedAt(LocalDateTime.now());
+        chatMessage.setMessageType(MessageType.CHAT);
+        messageService.sendMessage(chatMessage);
     }
 
     @MessageMapping("/join")
