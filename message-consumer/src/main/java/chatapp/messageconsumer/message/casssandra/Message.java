@@ -1,5 +1,4 @@
-package demo.chatapp.message.domain;
-
+package chatapp.messageconsumer.message.casssandra;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

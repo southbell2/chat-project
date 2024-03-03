@@ -1,4 +1,5 @@
-package demo.chatapp.config;
+package chatapp.messageconsumer.config;
+
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import java.net.InetSocketAddress;
@@ -26,5 +27,4 @@ public class CassandraConfig {
             .withLocalDatacenter(localDataCenter)
             .build();
     }
-
 }
