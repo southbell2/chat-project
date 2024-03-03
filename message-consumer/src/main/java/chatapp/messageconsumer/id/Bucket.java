@@ -1,4 +1,4 @@
-package chatapp.messageconsumer.message;
+package chatapp.messageconsumer.id;
 
 public class Bucket {
 

@@ -1,4 +1,4 @@
-package demo.chatapp;
+package demo.chatapp.id;
 
 import java.net.NetworkInterface;
 import java.security.SecureRandom;

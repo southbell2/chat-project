@@ -1,4 +1,4 @@
-package chatapp.messageconsumer;
+package chatapp.messageconsumer.id;
 
 import java.net.NetworkInterface;
 import java.security.SecureRandom;

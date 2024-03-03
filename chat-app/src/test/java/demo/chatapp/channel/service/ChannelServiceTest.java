@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.datastax.driver.core.Session;
 import demo.chatapp.AbstractContainerEnv;
-import demo.chatapp.IdGenerator;
-import demo.chatapp.channel.domain.Bucket;
+import demo.chatapp.id.IdGenerator;
+import demo.chatapp.id.Bucket;
 import demo.chatapp.channel.domain.Channel;
 import demo.chatapp.channel.domain.Entry;
 import demo.chatapp.channel.repository.ChannelRepository;

@@ -1,4 +1,4 @@
-package demo.chatapp.channel.domain;
+package demo.chatapp.id;
 
 public class Bucket {
 

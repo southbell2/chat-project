@@ -1,7 +1,7 @@
 package demo.chatapp.channel.service;
 
-import demo.chatapp.IdGenerator;
-import demo.chatapp.channel.domain.Bucket;
+import demo.chatapp.id.IdGenerator;
+import demo.chatapp.id.Bucket;
 import demo.chatapp.channel.domain.Channel;
 import demo.chatapp.channel.domain.Entry;
 import demo.chatapp.channel.repository.ChannelRepository;
