@@ -1,42 +1,46 @@
 package demo.chatapp.security.repository;
 
 import demo.chatapp.security.token.RefreshToken;
-import io.lettuce.core.api.async.RedisAsyncCommands;
-import io.lettuce.core.api.sync.RedisCommands;
 import java.util.Map;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
 public class RedisTokenRepository implements TokenRepository {
 
-    private final RedisCommands<String, String> sync;
-    private final RedisAsyncCommands<String, String> async;
+    private final StringRedisTemplate redisTemplate;
 
     @Override
     public void saveToken(RefreshToken refreshToken) {
-        sync.hmset(getTokenKey(refreshToken.getToken()), refreshTokenToMap(refreshToken));
+        HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
+        hashOps.putAll(getTokenKey(refreshToken.getToken()), refreshTokenToMap(refreshToken));
     }
 
     @Override
     public Long getTokenExpiration(String token) {
-        return Long.parseLong(sync.hget(getTokenKey(token), "exp"));
+        String key = getTokenKey(token);
+        String exp = (String) redisTemplate.opsForHash().get(key, "exp");
+        Objects.requireNonNull(exp, "String exp 객체는 null이면 안 됩니다.");
+        return Long.parseLong(exp);
     }
 
     @Override
     public Map<String, String> getTokenInfo(String token) {
-        return sync.hgetall(getTokenKey(token));
+        return redisTemplate.<String, String>opsForHash().entries(getTokenKey(token));
     }
 
     @Override
     public void deleteToken(String token) {
-        sync.del(getTokenKey(token));
+        redisTemplate.delete(getTokenKey(token));
     }
 
     @Override
     public boolean isTokenPresent(String token) {
-        return sync.exists(getTokenKey(token)) == 1;
+        return Boolean.TRUE.equals(redisTemplate.hasKey(getTokenKey(token)));
     }
 
     private String getTokenKey(String token) {

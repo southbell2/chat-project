@@ -13,11 +13,12 @@ spring:
   sql:
     init:
       mode: always
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 
-redis:
-  host: localhost
-  port: 6379
 
 jwt:
   secret-key: jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4
