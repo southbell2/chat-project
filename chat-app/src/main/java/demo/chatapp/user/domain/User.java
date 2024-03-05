@@ -21,7 +21,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.ToString.Exclude;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +31,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "email")
-@ToString
+@ToString(exclude = "userRoles")
 public class User {
 
     @Id
@@ -54,7 +53,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     @BatchSize(size = 5)
-    @Exclude
     private List<UserRole> userRoles = new ArrayList<>();
 
     public void setUserRoles(List<UserRole> userRoles) {

@@ -18,7 +18,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.ToString.Exclude;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.domain.Persistable;
 
@@ -28,7 +27,7 @@ import org.springframework.data.domain.Persistable;
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
-@ToString
+@ToString(exclude = {"user", "entries"})
 public class Channel implements Persistable<Long> {
 
     @Id
@@ -46,11 +45,9 @@ public class Channel implements Persistable<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "master_id")
-    @Exclude
     private User user;
 
     @OneToMany(mappedBy = "entryKey.channel")
-    @Exclude
     private List<Entry> entries = new ArrayList<>();
 
     public void setEntries(List<Entry> entries) {
