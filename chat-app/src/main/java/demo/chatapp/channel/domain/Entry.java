@@ -11,8 +11,8 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
-import org.springframework.data.domain.Persistable;
 
 @Entity
 @Table(name = "entries")
@@ -20,6 +20,7 @@ import org.springframework.data.domain.Persistable;
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "entryKey")
+@ToString
 public class Entry {
 
     @EmbeddedId

@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface EntryRepository extends JpaRepository<Entry, EntryKey> {
 
-    @Modifying
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("DELETE FROM Entry e"
         + " WHERE e.entryKey.channel.id = :channelId AND e.entryKey.user.id = :userId")
     void deleteByChannelIdAndUserId(@Param("channelId") Long channelId,
@@ -22,7 +22,7 @@ public interface EntryRepository extends JpaRepository<Entry, EntryKey> {
     Optional<Entry> findByChannelIdAndUserId(@Param("channelId") Long channelId,
         @Param("userId") Long userId);
 
-    @Modifying
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query(value = "INSERT INTO entries (channel_id, user_id) VALUES (:channelId, :userId)", nativeQuery = true)
     void saveEntry(@Param("channelId") Long channelId, @Param("userId") Long userId);
 

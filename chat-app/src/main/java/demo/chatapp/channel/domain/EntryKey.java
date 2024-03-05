@@ -29,10 +29,26 @@ public class EntryKey implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+    }
+
     EntryKey(Channel channel, User user) {
         Objects.requireNonNull(channel, "Channel은 null이 될 수 없습니다.");
         Objects.requireNonNull(user, "User는 null이 될 수 없습니다.");
         this.channel = channel;
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "EntryKey{" +
+            "channelId=" + channel.getId() +
+            ", userId=" + user.getId() +
+            '}';
     }
 }

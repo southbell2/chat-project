@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @SpringBootTest
 @ActiveProfiles("test")
-@AutoConfigureMockMvc(addFilters = true)
 class UserServiceTest extends AbstractContainerEnv {
 
     @Autowired

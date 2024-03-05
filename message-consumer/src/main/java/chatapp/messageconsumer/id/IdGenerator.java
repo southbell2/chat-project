@@ -1,10 +1,9 @@
-package demo.chatapp;
+package chatapp.messageconsumer.id;
 
 import java.net.NetworkInterface;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Enumeration;
-
 
 public class IdGenerator {
 

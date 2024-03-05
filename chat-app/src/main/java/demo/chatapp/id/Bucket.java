@@ -1,4 +1,4 @@
-package demo.chatapp.channel.domain;
+package demo.chatapp.id;
 
 public class Bucket {
 
@@ -10,5 +10,8 @@ public class Bucket {
     public static int calculateBucket(long timestamp) {
         timestamp -= DEFAULT_CUSTOM_EPOCH;
         return (int) (timestamp / UNIT_EPOCH);
+    }
+
+    private Bucket() {
     }
 }

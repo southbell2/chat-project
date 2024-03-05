@@ -1,7 +1,7 @@
 package demo.chatapp.channel.service;
 
-import demo.chatapp.IdGenerator;
-import demo.chatapp.channel.domain.Bucket;
+import demo.chatapp.id.IdGenerator;
+import demo.chatapp.id.Bucket;
 import demo.chatapp.channel.domain.Channel;
 import demo.chatapp.channel.domain.Entry;
 import demo.chatapp.channel.repository.ChannelRepository;
@@ -14,7 +14,6 @@ import demo.chatapp.message.domain.Message;
 import demo.chatapp.message.repository.MessageRepository;
 import demo.chatapp.user.domain.User;
 import demo.chatapp.user.repository.UserRepository;
-import java.time.ZoneId;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;

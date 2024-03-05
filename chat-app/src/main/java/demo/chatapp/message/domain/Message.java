@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
@@ -15,6 +16,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "messageKey")
+@ToString
 public class Message {
 
     @PrimaryKey
@@ -29,7 +31,8 @@ public class Message {
     @Column(value = "created_at")
     LocalDateTime createdAt;
 
-    public static Message createMessage(Long channelId, Integer bucket, Long messageId, String nickname, String content) {
+    public static Message createMessage(Long channelId, Integer bucket, Long messageId,
+        String nickname, String content) {
         MessageKey messageKey = new MessageKey(channelId, bucket, messageId);
         Message message = new Message();
         message.setMessageKey(messageKey);
