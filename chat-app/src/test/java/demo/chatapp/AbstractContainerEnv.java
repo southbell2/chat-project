@@ -22,7 +22,7 @@ public abstract class AbstractContainerEnv {
         cassandra.start();
         createKeyspace(cassandra.getCluster());
         redis.start();
-        
+
         System.setProperty("spring.data.redis.host", redis.getHost());
         System.setProperty("spring.data.redis.port", String.valueOf(redis.getMappedPort(6379)));
 
@@ -51,14 +51,5 @@ public abstract class AbstractContainerEnv {
 
         }
     }
-
-//    @DynamicPropertySource
-//    static void setProperties(DynamicPropertyRegistry registry) {
-//        registry.add("cassandra.contact-point", cassandra::getHost);
-//        registry.add("cassandra.local-datacenter", cassandra::getLocalDatacenter);
-//        registry.add("cassandra.port", () -> cassandra.getMappedPort(9042));
-//        registry.add("cassandra.keyspace", () -> KEYSPACE_NAME);
-//    }
-
 
 }
