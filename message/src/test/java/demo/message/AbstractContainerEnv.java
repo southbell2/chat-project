@@ -7,7 +7,8 @@ import org.testcontainers.utility.DockerImageName;
 @Testcontainers
 public abstract class AbstractContainerEnv {
 
-    public static GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis:latest")).withExposedPorts(6379);
+    public static GenericContainer<?> redis = new GenericContainer<>(
+        DockerImageName.parse("redis:6.0.20")).withExposedPorts(6379);
 
     static {
         redis.start();

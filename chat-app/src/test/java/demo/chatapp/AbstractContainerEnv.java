@@ -15,10 +15,21 @@ public abstract class AbstractContainerEnv {
     private static final String KEYSPACE_NAME = "test";
     public static CassandraContainer<?> cassandra = new CassandraContainer<>("cassandra:4.1.3")
         .withExposedPorts(9042);
+    public static GenericContainer<?> redis = new GenericContainer<>(
+        DockerImageName.parse("redis:6.0.20")).withExposedPorts(6379);
 
     static {
         cassandra.start();
         createKeyspace(cassandra.getCluster());
+        redis.start();
+        
+        System.setProperty("spring.data.redis.host", redis.getHost());
+        System.setProperty("spring.data.redis.port", String.valueOf(redis.getMappedPort(6379)));
+
+        System.setProperty("cassandra.contact-point", cassandra.getHost());
+        System.setProperty("cassandra.local-datacenter", cassandra.getLocalDatacenter());
+        System.setProperty("cassandra.port", String.valueOf(cassandra.getMappedPort(9042)));
+        System.setProperty("cassandra.keyspace", KEYSPACE_NAME);
     }
 
     private static void createKeyspace(Cluster cluster) {
@@ -41,13 +52,13 @@ public abstract class AbstractContainerEnv {
         }
     }
 
-    @DynamicPropertySource
-    static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("cassandra.contact-point", cassandra::getHost);
-        registry.add("cassandra.local-datacenter", cassandra::getLocalDatacenter);
-        registry.add("cassandra.port", () -> cassandra.getMappedPort(9042));
-        registry.add("cassandra.keyspace", () -> KEYSPACE_NAME);
-    }
+//    @DynamicPropertySource
+//    static void setProperties(DynamicPropertyRegistry registry) {
+//        registry.add("cassandra.contact-point", cassandra::getHost);
+//        registry.add("cassandra.local-datacenter", cassandra::getLocalDatacenter);
+//        registry.add("cassandra.port", () -> cassandra.getMappedPort(9042));
+//        registry.add("cassandra.keyspace", () -> KEYSPACE_NAME);
+//    }
 
 
 }
