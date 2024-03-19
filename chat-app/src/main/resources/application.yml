@@ -36,3 +36,9 @@ cassandra:
   port: 9042
   local-datacenter: datacenter1
   keyspace: chat
+
+#server:
+#  tomcat:
+#    threads:
+#      max: 200
+#      min-spare: 10
