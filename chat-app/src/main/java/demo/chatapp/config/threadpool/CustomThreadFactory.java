@@ -1,5 +1,6 @@
 package demo.chatapp.config.threadpool;
 
+import demo.chatapp.id.IdGeneratorMap;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Objects;
@@ -25,9 +26,8 @@ public class CustomThreadFactory implements ThreadFactory {
 
     @Override
     public Thread newThread(Runnable r) {
-        Integer name = ThreadNameQueue.poll();
-        Objects.requireNonNull(name, "쓰레드 이름은 null이 될 수 없습니다.");
-        CustomThread t = new CustomThread(group, r, name.toString());
+        Thread t = makeCustomThread(r);
+
         t.setDaemon(daemon);
         t.setPriority(threadPriority);
 
@@ -48,5 +48,11 @@ public class CustomThreadFactory implements ThreadFactory {
         }
 
         return t;
+    }
+
+    private CustomThread makeCustomThread(Runnable r) {
+        Integer name = ThreadNameQueue.poll();
+        Objects.requireNonNull(name, "쓰레드 이름은 null이 될 수 없습니다.");
+        return new CustomThread(group, r, name.toString());
     }
 }

@@ -20,8 +20,9 @@ public class TomcatConfig {
 
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer() {
-        //ThreadNameQueue 초기화
-        ThreadNameQueue.initQueue(maxThreadPoolSize);
+        //ThreadNameQueue, IdGeneratorMap 초기화
+        int maxThreadName = ThreadNameQueue.initQueue(maxThreadPoolSize);
+
         //ThreadPoolExecutor 만들기
         Executor executor = createThreadPoolExecutor();
         return factory -> factory.addConnectorCustomizers(connector -> {

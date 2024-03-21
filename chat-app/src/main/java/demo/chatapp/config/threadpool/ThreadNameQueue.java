@@ -24,11 +24,12 @@ public class ThreadNameQueue {
         return queue.add(number);
     }
 
-    static void initQueue(int maxThreadPoolSize) {
+    static int initQueue(int maxThreadPoolSize) {
         maxQueueNumber = maxThreadPoolSize + 10;
         for (int n = 0; n < maxQueueNumber; n++) {
             queue.add(n);
         }
+        return maxQueueNumber;
     }
 
 }

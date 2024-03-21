@@ -1,5 +1,6 @@
 package demo.chatapp.config.threadpool;
 
+import demo.chatapp.id.IdGeneratorMap;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.util.threads.StopPooledThreadException;
@@ -39,8 +40,8 @@ public class CustomThread extends Thread{
                 //debuggers like eclipse's
                 log.debug("Thread exiting on purpose", exc);
             } finally {
-                String name = Thread.currentThread().getName();
-                ThreadNameQueue.add(Integer.parseInt(name));
+                Integer name = Integer.parseInt(Thread.currentThread().getName());
+                ThreadNameQueue.add(name);
             }
         }
 

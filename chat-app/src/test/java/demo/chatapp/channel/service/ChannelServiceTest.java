@@ -4,14 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.datastax.driver.core.Session;
 import demo.chatapp.AbstractContainerEnv;
-import demo.chatapp.id.IdGenerator;
-import demo.chatapp.id.Bucket;
 import demo.chatapp.channel.domain.Channel;
 import demo.chatapp.channel.domain.Entry;
 import demo.chatapp.channel.repository.ChannelRepository;
 import demo.chatapp.channel.repository.EntryRepository;
 import demo.chatapp.channel.service.dto.ChannelInfoResponse;
 import demo.chatapp.channel.service.dto.JoinChannelResponse;
+import demo.chatapp.config.threadpool.ThreadNameQueue;
+import demo.chatapp.id.Bucket;
+import demo.chatapp.id.IdGeneratorMap;
 import demo.chatapp.message.domain.Message;
 import demo.chatapp.message.repository.MessageRepository;
 import demo.chatapp.user.domain.User;
@@ -22,10 +23,10 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +49,6 @@ class ChannelServiceTest extends AbstractContainerEnv {
     ChannelRepository channelRepository;
     @Autowired
     EntityManager em;
-    IdGenerator idGenerator = new IdGenerator();
 
     String testEmail;
     String testNickname;
@@ -57,8 +57,19 @@ class ChannelServiceTest extends AbstractContainerEnv {
     String joinEmail;
     String joinNickname;
     String joinPassword;
+    static int maxThreadName;
     @Autowired
     private EntryRepository entryRepository;
+
+    @BeforeAll
+    public static void threadSetUp() {
+        maxThreadName = 10;
+        for (int i = 0; i < maxThreadName; i++) {
+            ThreadNameQueue.add(i);
+        }
+        IdGeneratorMap.initMap(maxThreadName);
+        Thread.currentThread().setName("0");
+    }
 
     @BeforeEach
     public void setUp() {
@@ -78,6 +89,7 @@ class ChannelServiceTest extends AbstractContainerEnv {
         userRequest.setNickname(joinNickname);
         userRequest.setPassword(joinPassword);
         userService.signUp(userRequest);
+
     }
 
     @AfterEach
@@ -92,7 +104,7 @@ class ChannelServiceTest extends AbstractContainerEnv {
         String title = "test channel";
         User user = userRepository.findByEmailWithRole(testEmail).get();
         Long masterId = user.getId();
-        long smallerId = idGenerator.nextId();
+        long smallerId = IdGeneratorMap.idGeneratorMap.get(Integer.parseInt(Thread.currentThread().getName())).nextId();
         Thread.sleep(100L);
 
         //when
@@ -116,7 +128,7 @@ class ChannelServiceTest extends AbstractContainerEnv {
         long channelId = channelService.createChannel(title, masterId);
 
         //채팅방에 메세지 저장
-        long[] parse = idGenerator.parse(channelId);
+        long[] parse = IdGeneratorMap.idGeneratorMap.get(Integer.parseInt(Thread.currentThread().getName())).parse(channelId);
         Integer bucket = Bucket.calculateBucket(parse[0]);
         Message message1 = Message.createMessage(channelId, bucket, 1L, "kim", "first");
         Message message2 = Message.createMessage(channelId, bucket, 2L, "kim", "second");

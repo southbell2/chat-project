@@ -9,6 +9,7 @@ import demo.chatapp.channel.repository.EntryRepository;
 import demo.chatapp.channel.service.dto.ChannelInfoResponse;
 import demo.chatapp.channel.service.dto.JoinChannelResponse;
 import demo.chatapp.channel.service.dto.MessageResponse;
+import demo.chatapp.id.IdGeneratorMap;
 import demo.chatapp.message.MessageMapper;
 import demo.chatapp.message.domain.Message;
 import demo.chatapp.message.repository.MessageRepository;
@@ -31,7 +32,6 @@ public class ChannelService {
     private final EntryRepository entryRepository;
     private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
-    private final IdGenerator idGenerator = new IdGenerator();
 
     @Autowired
     public ChannelService(ChannelRepository channelRepository, UserRepository userRepository,
@@ -48,7 +48,8 @@ public class ChannelService {
     @Transactional
     public long createChannel(String title, Long masterId) {
         //채널 생성
-        long id = idGenerator.nextId();
+        int threadName = Integer.parseInt(Thread.currentThread().getName());
+        long id = IdGeneratorMap.idGeneratorMap.get(threadName).nextId();
         User user = userRepository.findById(masterId).orElseThrow();
         Channel channel = Channel.createChannel(id, title, user);
         channelRepository.save(channel);
@@ -131,6 +132,8 @@ public class ChannelService {
     }
 
     private int getBucket(Long channelId) {
+        Integer threadName = Integer.parseInt(Thread.currentThread().getName());
+        IdGenerator idGenerator = IdGeneratorMap.idGeneratorMap.get(threadName);
         long[] parsingId = idGenerator.parse(channelId);
         return Bucket.calculateBucket(parsingId[0]);
     }
