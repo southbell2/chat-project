@@ -1,6 +1,6 @@
-package demo.chatapp.config.threadpool;
+package chatapp.messageconsumer.config.threadpool;
 
-import demo.chatapp.id.IdGeneratorMap;
+import chatapp.messageconsumer.id.IdGeneratorMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import org.apache.tomcat.util.threads.TaskQueue;

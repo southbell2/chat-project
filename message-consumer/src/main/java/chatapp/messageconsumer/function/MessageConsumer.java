@@ -4,6 +4,7 @@ import static chatapp.messageconsumer.constant.ChannelConstant.REDIS_CHANNEL_PRE
 
 import chatapp.messageconsumer.id.Bucket;
 import chatapp.messageconsumer.id.IdGenerator;
+import chatapp.messageconsumer.id.IdGeneratorMap;
 import chatapp.messageconsumer.message.ChatMessage;
 import chatapp.messageconsumer.message.MessageRepository;
 import chatapp.messageconsumer.message.casssandra.Message;
@@ -18,8 +19,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 @Configuration
 @Slf4j
 public class MessageConsumer {
-
-    private final IdGenerator idGenerator = new IdGenerator();
 
     @Bean
     public Consumer<ChatMessage> consume(MessageRepository messageRepository,
@@ -38,13 +37,15 @@ public class MessageConsumer {
     }
 
     private Message createMessage(ChatMessage chatMessage) {
+        Integer threadName = Integer.parseInt(Thread.currentThread().getName());
+        IdGenerator idGenerator = IdGeneratorMap.idGeneratorMap.get(threadName);
         long messageId = idGenerator.nextId();
-        int bucket = getBucket(messageId);
+        int bucket = getBucket(messageId, idGenerator);
         return Message.createMessage(chatMessage.getChannelId(), bucket, messageId,
             chatMessage.getNickname(), chatMessage.getContent());
     }
 
-    private int getBucket(long messageId) {
+    private int getBucket(long messageId, IdGenerator idGenerator) {
         long[] parse = idGenerator.parse(messageId);
         return Bucket.calculateBucket(parse[0]);
     }
