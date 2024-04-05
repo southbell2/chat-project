@@ -14,7 +14,6 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -62,7 +61,6 @@ public class MessageService {
         }
     }
 
-    @Async
     public void sendMessage(ChatMessage chatMessage) {
         Message<ChatMessage> message = MessageBuilder.withPayload(chatMessage)
             .setHeader("partitionKey", chatMessage.getChannelId())

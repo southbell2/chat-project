@@ -25,23 +25,13 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
-import org.springframework.web.socket.sockjs.client.SockJsClient;
-import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 public class MessageTest extends AbstractContainerEnv {
 
-    static WebSocketStompClient stompClient =
-        new WebSocketStompClient(
-            new SockJsClient(List.of(
-                new WebSocketTransport(
-                    new StandardWebSocketClient()
-                )
-            )
-            )
-        );
+    static WebSocketStompClient stompClient = new WebSocketStompClient(new StandardWebSocketClient());
 
     static String url;
     static long channelId = 123L;
