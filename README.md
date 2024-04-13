@@ -36,7 +36,7 @@
 5. Message : 클라이언트와 웹소켓으로 연결되어 있어서 메시지를 송수신 한다.
 6. Kafka : 이벤트로 발행된 메시지를 다루는 이벤트 스트리밍 플랫폼
 7. Message Consumer : 카프카 컨슈머로 메시지를 카산드라에 저장하고 Redis에 발행한다.
-8. Redis : Redis Pub/Sub 기능을 활용해 메시지를 송신한다.
+8. Redis : Redis Pub/Sub 기능을 활용해 채널에 들어가 있는 회원에게 메시지를 전송한다.
 
 ------------
 
@@ -99,4 +99,12 @@ PRIMARY KEY ((channel_id, bucket), message_id)) WITH CLUSTERING ORDER BY (messag
 
 고려사항 및 개선사항
 =================
-
+* Spring Security를 사용해 JWT, Refresh Token으로 인증 구현
+* MySQL에서 페이징 쿼리 최적화
+* 대용량의 메시지 데이터 저장을 위해 확장성과 가용성이 뛰어난 카산드라 데이터베이스 사용
+* 카산드라의 특정 노드에만 데이터가 너무 많이 저장되는 것을 방지하기 위해 partition key는 channel_id와 일정 시간마다 증가하는 bucket으로 구성
+* 성능을 고려해 MySQL의 스키마 설계
+* 추후 확장성을 고려해 메시지를 이벤트로 발행
+* Redis Pub/Sub을 사용해 채널에 입장해 있는 회원에게 메시지를 전달
+* 분산 환경을 위해 snowflake id를 사용. 이 때 성능 개선을 위해 Thread bit를 도입해서 id 생성시 데이터 동기화를 위한 락을 최소화.
+* 통합된 테스트 환경 구축을 위해 Testcontainers 사용
