@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  sql:
+    init:
+      mode: always
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+logging.level:
+  org.hibernate.SQL: debug
+
+jwt:
+  secret-key: jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4
+  token-validity-in-sec: 300
+  refresh-token-validity-in-sec: 604800
+
+admin:
+  ip: 127.0.0.1
