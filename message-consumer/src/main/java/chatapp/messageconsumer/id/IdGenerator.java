@@ -9,9 +9,9 @@ public class IdGenerator {
 
     private static final int UNUSED_BITS = 1; // Sign bit, Unused (always set to 0)
     private static final int EPOCH_BITS = 41;
-    private static final int NODE_ID_BITS = 7;
-    private static final int SEQUENCE_BITS = 6;
-    private static final int THREAD_BITS = 9;
+    private static final int NODE_ID_BITS = 5;
+    private static final int SEQUENCE_BITS = 9;
+    private static final int THREAD_BITS = 8;
 
     private static final long maxNodeId = (1L << NODE_ID_BITS) - 1;
     private static final long maxSequence = (1L << SEQUENCE_BITS) - 1;
