@@ -106,5 +106,7 @@ PRIMARY KEY ((channel_id, bucket), message_id)) WITH CLUSTERING ORDER BY (messag
 * 성능을 고려해 MySQL의 스키마 설계
 * 추후 확장성을 고려해 메시지를 이벤트로 발행
 * Redis Pub/Sub을 사용해 채널에 입장해 있는 회원에게 메시지를 전달
-* 분산 환경을 위해 snowflake id를 사용. 이 때 성능 개선을 위해 Thread bit를 도입해서 id 생성시 데이터 동기화를 위한 락을 최소화.
 * 통합된 테스트 환경 구축을 위해 Testcontainers 사용
+* 분산 환경을 위해 snowflake id를 사용
+* snowflake 성능 개선을 위해 Thread bit 도입해서 id 생성시 데이터 동기화를 위한 락을 최소화 성능 약 10~20% 상승 (아래 이미지 참조)
+<img src="https://github.com/southbell2/chat-project/blob/master/images/performance-test.jpg" width="800" height="60">
