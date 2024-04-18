@@ -8,6 +8,7 @@ import chatapp.messageconsumer.id.IdGeneratorMap;
 import chatapp.messageconsumer.message.ChatMessage;
 import chatapp.messageconsumer.message.MessageRepository;
 import chatapp.messageconsumer.message.casssandra.Message;
+import chatapp.messageconsumer.service.ConsumerTaskService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.concurrent.ExecutorService;
@@ -24,25 +25,11 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 @Slf4j
 public class MessageConsumer {
 
-    //카산드라에 저장과 레디스에 메시지를 발행하는 작업을 비동기적으로 하기 위한 쓰레드풀
-    private final ExecutorService executorService = new ThreadPoolExecutor(10, 200, 60,
-        TimeUnit.SECONDS, new LinkedBlockingQueue<>(20));
-
     @Bean
-    public Consumer<ChatMessage> consume(MessageRepository messageRepository,
-        StringRedisTemplate redisTemplate, ObjectMapper objectMapper) {
+    public Consumer<ChatMessage> consume(ConsumerTaskService service) {
         return chatMessage -> {
-            String subChannel = REDIS_CHANNEL_PREFIX + chatMessage.getChannelId();
-            executorService.submit(() -> {
-                try {
-                    String messageJson = objectMapper.writeValueAsString(chatMessage);
-                    redisTemplate.convertAndSend(subChannel, messageJson);
-                } catch (JsonProcessingException e) {
-                    log.info("JsonProcessingException = ", e);
-                }
-                Message message = createMessage(chatMessage);
-                messageRepository.save(message);
-            });
+            service.publishRedis(chatMessage);
+            service.saveMessageInCassandra(createMessage(chatMessage));
         };
     }
 
