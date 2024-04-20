@@ -1,0 +1,31 @@
+2024-04-20T13:52:34.857599Z 0 [System] [MY-015017] [Server] MySQL Server Initialization - start.
+2024-04-20T13:52:34.858896Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
+2024-04-20T13:52:34.859230Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.1.0) initializing of server in progress as process 80
+2024-04-20T13:52:34.880581Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-04-20T13:52:35.317125Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2024-04-20T13:52:36.942582Z 6 [Warning] [MY-010453] [Server] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.
+2024-04-20T13:52:39.805157Z 0 [System] [MY-015018] [Server] MySQL Server Initialization - end.
+2024-04-20T13:52:39.931513Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+2024-04-20T13:52:40.127656Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
+2024-04-20T13:52:40.129950Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.1.0) starting as process 124
+2024-04-20T13:52:40.157534Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-04-20T13:52:40.310596Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2024-04-20T13:52:40.595957Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2024-04-20T13:52:40.596302Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2024-04-20T13:52:40.599143Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+2024-04-20T13:52:40.617994Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: /var/run/mysqld/mysqlx.sock
+2024-04-20T13:52:40.618130Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.1.0'  socket: '/var/run/mysqld/mysqld.sock'  port: 0  MySQL Community Server - GPL.
+2024-04-20T13:52:43.400175Z 11 [System] [MY-013172] [Server] Received SHUTDOWN from user root. Shutting down mysqld (Version: 8.1.0).
+2024-04-20T13:52:45.241021Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.1.0)  MySQL Community Server - GPL.
+2024-04-20T13:52:45.243325Z 0 [System] [MY-015016] [Server] MySQL Server - end.
+2024-04-20T13:52:45.413453Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+2024-04-20T13:52:45.589732Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
+2024-04-20T13:52:45.590690Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.1.0) starting as process 1
+2024-04-20T13:52:45.609345Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-04-20T13:52:45.715711Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2024-04-20T13:52:45.975856Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2024-04-20T13:52:45.976050Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2024-04-20T13:52:45.978482Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+2024-04-20T13:52:45.994264Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock
+2024-04-20T13:52:45.994372Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.1.0'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
+2024-04-20T14:04:28.164012Z 0 [System] [MY-013172] [Server] Received SHUTDOWN from user <via user signal>. Shutting down mysqld (Version: 8.1.0).

@@ -1,0 +1,40 @@
+2024-04-20T13:52:34.857599Z 0 [System] [MY-015017] [Server] MySQL Server Initialization - start.
+2024-04-20T13:52:34.858941Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
+2024-04-20T13:52:34.858965Z 0 [Warning] [MY-011068] [Server] The syntax 'log_slave_updates' is deprecated and will be removed in a future release. Please use log_replica_updates instead.
+2024-04-20T13:52:34.859227Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.1.0) initializing of server in progress as process 81
+2024-04-20T13:52:34.871039Z 0 [Warning] [MY-010161] [Server] You need to use --log-bin to make --log-replica-updates work.
+2024-04-20T13:52:34.880683Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-04-20T13:52:35.310416Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2024-04-20T13:52:36.801172Z 6 [Warning] [MY-010453] [Server] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.
+2024-04-20T13:52:39.821639Z 0 [System] [MY-015018] [Server] MySQL Server Initialization - end.
+2024-04-20T13:52:39.931507Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+2024-04-20T13:52:40.142918Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
+2024-04-20T13:52:40.142950Z 0 [Warning] [MY-011068] [Server] The syntax 'log_slave_updates' is deprecated and will be removed in a future release. Please use log_replica_updates instead.
+2024-04-20T13:52:40.144326Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.1.0) starting as process 125
+2024-04-20T13:52:40.168705Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-04-20T13:52:40.310596Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2024-04-20T13:52:40.582979Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2024-04-20T13:52:40.583271Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2024-04-20T13:52:40.586403Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+2024-04-20T13:52:40.605269Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: /var/run/mysqld/mysqlx.sock
+2024-04-20T13:52:40.605474Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.1.0'  socket: '/var/run/mysqld/mysqld.sock'  port: 0  MySQL Community Server - GPL.
+2024-04-20T13:52:43.393596Z 11 [System] [MY-013172] [Server] Received SHUTDOWN from user root. Shutting down mysqld (Version: 8.1.0).
+2024-04-20T13:52:45.251703Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.1.0)  MySQL Community Server - GPL.
+2024-04-20T13:52:45.254300Z 0 [System] [MY-015016] [Server] MySQL Server - end.
+2024-04-20T13:52:45.408171Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+2024-04-20T13:52:45.580318Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
+2024-04-20T13:52:45.580347Z 0 [Warning] [MY-011068] [Server] The syntax 'log_slave_updates' is deprecated and will be removed in a future release. Please use log_replica_updates instead.
+2024-04-20T13:52:45.580894Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.1.0) starting as process 1
+2024-04-20T13:52:45.599363Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2024-04-20T13:52:45.712062Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2024-04-20T13:52:45.914025Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2024-04-20T13:52:45.914258Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2024-04-20T13:52:45.917426Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+2024-04-20T13:52:45.934267Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock
+2024-04-20T13:52:45.934349Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.1.0'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
+2024-04-20T13:57:13.306606Z 8 [System] [MY-010597] [Repl] 'CHANGE REPLICATION SOURCE TO FOR CHANNEL '' executed'. Previous state source_host='', source_port= 3306, source_log_file='', source_log_pos= 4, source_bind=''. New state source_host='chat-project-master-1', source_port= 3306, source_log_file='', source_log_pos= 4, source_bind=''.
+2024-04-20T13:57:23.601731Z 9 [Warning] [MY-010897] [Repl] Storing MySQL user name or password information in the connection metadata repository is not secure and is therefore not recommended. Please consider using the USER and PASSWORD connection options for START REPLICA; see the 'START REPLICA Syntax' in the MySQL Manual for more information.
+2024-04-20T13:57:23.620647Z 9 [System] [MY-014002] [Repl] Replica receiver thread for channel '': connected to source 'repl_user@chat-project-master-1:3306' with server_uuid=3daa31a6-ff1d-11ee-8bf4-0242ac140002, server_id=1111. Starting GTID-based replication.
+2024-04-20T14:04:28.163941Z 0 [System] [MY-013172] [Server] Received SHUTDOWN from user <via user signal>. Shutting down mysqld (Version: 8.1.0).
+2024-04-20T14:04:29.560640Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.1.0)  MySQL Community Server - GPL.
+2024-04-20T14:04:29.625432Z 0 [System] [MY-015016] [Server] MySQL Server - end.

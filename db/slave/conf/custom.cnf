@@ -1,0 +1,9 @@
+[mysqld]
+gtid_mode=ON
+enforce-gtid-consistency=ON
+server-id=2222
+relay-log=/var/log/mysql/relay.log
+relay-log-purge=ON
+read_only
+log_slave_updates
+log-error=/var/log/mysql/error.log
