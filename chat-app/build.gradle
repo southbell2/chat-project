@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.1.1'
-	id 'io.spring.dependency-management' version '1.1.0'
+	id 'org.springframework.boot' version '3.2.5'
+	id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'demo'
@@ -22,17 +22,24 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-cassandra'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.testcontainers:cassandra'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:mysql'
+
+
 
 	//jwt
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
@@ -42,33 +49,12 @@ dependencies {
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
-	//redis client
-	implementation 'io.lettuce:lettuce-core:6.2.5.RELEASE'
-
-	// https://mvnrepository.com/artifact/it.ozimov/embedded-redis
-	implementation('it.ozimov:embedded-redis:0.7.3') {
-		exclude group: 'org.slf4j', module: 'slf4j-simple'
-	}
-
-	// jpa 쿼리 로그
-	implementation group: 'com.github.gavlyukovskiy', name: 'p6spy-spring-boot-starter', version: '1.9.0'
-
 	//mapstruct
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
-	//spring data cassandra
-	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-cassandra
-	implementation group: 'org.springframework.data', name: 'spring-data-cassandra', version: '4.1.2'
-
-	//test containers
-	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.19.3'
-	testImplementation group: 'org.testcontainers', name: 'cassandra', version: '1.19.3'
-	testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.19.3'
-
 	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
-	implementation group: 'org.springframework.data', name: 'spring-data-commons', version: '3.1.2'
-
+	implementation group: 'org.springframework.data', name: 'spring-data-commons', version: '3.2.5'
 
 
 

@@ -1,8 +1,16 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/chat
-    username: root
-    password: root
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/chat
+      username: root
+      password: root
+    slave:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3307/chat
+      username: root
+      password: root
+
   jpa:
     hibernate:
       ddl-auto: none

@@ -1,6 +1,17 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL
+    master:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:testdb;MODE=MySQL
+      username: root
+      password: root
+    slave:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:testdb;MODE=MySQL
+      username: root
+      password: root
+
+
   jpa:
     hibernate:
       ddl-auto: none
