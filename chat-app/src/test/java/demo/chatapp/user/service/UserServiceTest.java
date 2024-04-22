@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles({"test", "id-nosync"})
 class UserServiceTest extends AbstractContainerEnv {
 
     @Autowired

@@ -1,6 +1,6 @@
 package demo.chatapp.config.threadpool;
 
-import demo.chatapp.id.IdGeneratorMap;
+import demo.chatapp.id.ThreadNameQueue;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.util.threads.StopPooledThreadException;

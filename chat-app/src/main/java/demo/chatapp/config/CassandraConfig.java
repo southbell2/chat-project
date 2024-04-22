@@ -1,7 +1,6 @@
 package demo.chatapp.config;
 
 import com.datastax.oss.driver.api.core.CqlSession;
-import demo.chatapp.config.threadpool.ThreadNameQueue;
 import java.net.InetSocketAddress;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

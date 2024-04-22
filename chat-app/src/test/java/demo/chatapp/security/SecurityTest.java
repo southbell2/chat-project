@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles({"test", "id-nosync"})
 @AutoConfigureMockMvc(addFilters = true)
 public class SecurityTest extends AbstractContainerEnv {
 

@@ -1,6 +1,5 @@
 package demo.chatapp.config.threadpool;
 
-import demo.chatapp.id.IdGeneratorMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import org.apache.tomcat.util.threads.TaskQueue;
@@ -21,10 +20,6 @@ public class TomcatConfig {
 
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer() {
-        //ThreadNameQueue, IdGeneratorMap 초기화
-        int maxThreadName = ThreadNameQueue.initQueue(maxThreadPoolSize);
-        IdGeneratorMap.initMap(maxThreadName);
-
         //ThreadPoolExecutor 만들기
         Executor executor = createThreadPoolExecutor();
         return factory -> factory.addConnectorCustomizers(connector -> {

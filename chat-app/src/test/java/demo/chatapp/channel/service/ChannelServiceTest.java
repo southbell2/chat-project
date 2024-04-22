@@ -10,7 +10,7 @@ import demo.chatapp.channel.repository.ChannelRepository;
 import demo.chatapp.channel.repository.EntryRepository;
 import demo.chatapp.channel.service.dto.ChannelInfoResponse;
 import demo.chatapp.channel.service.dto.JoinChannelResponse;
-import demo.chatapp.config.threadpool.ThreadNameQueue;
+import demo.chatapp.id.ThreadNameQueue;
 import demo.chatapp.id.Bucket;
 import demo.chatapp.id.IdGeneratorMap;
 import demo.chatapp.message.domain.Message;
@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles({"test", "id-nosync"})
 class ChannelServiceTest extends AbstractContainerEnv {
 
     @Autowired

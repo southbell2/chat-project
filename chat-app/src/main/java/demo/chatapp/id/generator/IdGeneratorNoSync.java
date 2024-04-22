@@ -1,11 +1,11 @@
-package demo.chatapp.id;
+package demo.chatapp.id.generator;
 
 import java.net.NetworkInterface;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Enumeration;
 
-public class IdGenerator {
+public class IdGeneratorNoSync implements IdGenerator {
 
     private static final int UNUSED_BITS = 1; // Sign bit, Unused (always set to 0)
     private static final int EPOCH_BITS = 41;
@@ -28,7 +28,7 @@ public class IdGenerator {
     private volatile long sequence = 0L;
 
     // Let Snowflake generate a nodeId
-    protected IdGenerator(long thread) {
+    public IdGeneratorNoSync(long thread) {
         this.nodeId = createNodeId();
         this.customEpoch = DEFAULT_CUSTOM_EPOCH;
         this.thread = thread;

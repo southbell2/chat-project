@@ -1,7 +1,5 @@
 package demo.chatapp.channel.service;
 
-import demo.chatapp.id.IdGenerator;
-import demo.chatapp.id.Bucket;
 import demo.chatapp.channel.domain.Channel;
 import demo.chatapp.channel.domain.Entry;
 import demo.chatapp.channel.repository.ChannelRepository;
@@ -9,14 +7,17 @@ import demo.chatapp.channel.repository.EntryRepository;
 import demo.chatapp.channel.service.dto.ChannelInfoResponse;
 import demo.chatapp.channel.service.dto.JoinChannelResponse;
 import demo.chatapp.channel.service.dto.MessageResponse;
+import demo.chatapp.id.Bucket;
 import demo.chatapp.id.IdGeneratorMap;
+import demo.chatapp.id.generator.IdGeneratorNoSync;
+import demo.chatapp.id.manager.IdGeneratorManager;
 import demo.chatapp.message.MessageMapper;
 import demo.chatapp.message.domain.Message;
 import demo.chatapp.message.repository.MessageRepository;
 import demo.chatapp.user.domain.User;
 import demo.chatapp.user.repository.UserRepository;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ChannelService {
 
@@ -32,24 +34,14 @@ public class ChannelService {
     private final EntryRepository entryRepository;
     private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
+    private final IdGeneratorManager idGeneratorManager;
 
-    @Autowired
-    public ChannelService(ChannelRepository channelRepository, UserRepository userRepository,
-        EntryRepository entryRepository, MessageRepository messageRepository,
-        MessageMapper messageMapper) {
-        this.channelRepository = channelRepository;
-        this.userRepository = userRepository;
-        this.entryRepository = entryRepository;
-        this.messageRepository = messageRepository;
-        this.messageMapper = messageMapper;
-    }
 
 
     @Transactional
     public long createChannel(String title, Long masterId) {
         //채널 생성
-        int threadName = Integer.parseInt(Thread.currentThread().getName());
-        long id = IdGeneratorMap.idGeneratorMap.get(threadName).nextId();
+        long id = idGeneratorManager.getIdGenerator().nextId();
         User user = userRepository.findById(masterId).orElseThrow();
         Channel channel = Channel.createChannel(id, title, user);
         channelRepository.save(channel);
@@ -133,8 +125,8 @@ public class ChannelService {
 
     private int getBucket(Long channelId) {
         Integer threadName = Integer.parseInt(Thread.currentThread().getName());
-        IdGenerator idGenerator = IdGeneratorMap.idGeneratorMap.get(threadName);
-        long[] parsingId = idGenerator.parse(channelId);
+        IdGeneratorNoSync idGeneratorNoSync = IdGeneratorMap.idGeneratorMap.get(threadName);
+        long[] parsingId = idGeneratorNoSync.parse(channelId);
         return Bucket.calculateBucket(parsingId[0]);
     }
 
