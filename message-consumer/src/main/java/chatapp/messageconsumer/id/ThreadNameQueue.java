@@ -1,4 +1,4 @@
-package chatapp.messageconsumer.config.threadpool;
+package chatapp.messageconsumer.id;
 
 import java.util.Objects;
 import java.util.Queue;
@@ -24,7 +24,7 @@ public class ThreadNameQueue {
         return queue.add(number);
     }
 
-    static int initQueue(int maxThreadPoolSize) {
+    public static int initQueue(int maxThreadPoolSize) {
         maxQueueNumber = maxThreadPoolSize + 10;
         for (int n = 0; n < maxQueueNumber; n++) {
             queue.add(n);

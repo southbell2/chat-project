@@ -1,41 +1,35 @@
 package chatapp.messageconsumer.function;
 
-import static chatapp.messageconsumer.constant.ChannelConstant.REDIS_CHANNEL_PREFIX;
-
 import chatapp.messageconsumer.id.Bucket;
-import chatapp.messageconsumer.id.IdGenerator;
-import chatapp.messageconsumer.id.IdGeneratorMap;
+import chatapp.messageconsumer.id.generator.IdGenerator;
+import chatapp.messageconsumer.id.manager.IdGeneratorManager;
 import chatapp.messageconsumer.message.ChatMessage;
-import chatapp.messageconsumer.message.MessageRepository;
 import chatapp.messageconsumer.message.casssandra.Message;
 import chatapp.messageconsumer.service.ConsumerTaskService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 @Configuration
+@RequiredArgsConstructor
 @Slf4j
 public class MessageConsumer {
+
+    private final IdGeneratorManager idGeneratorManager;
 
     @Bean
     public Consumer<ChatMessage> consume(ConsumerTaskService service) {
         return chatMessage -> {
             service.publishRedis(chatMessage);
             service.saveMessageInCassandra(createMessage(chatMessage));
+            log.info("Message Consuming = {}", chatMessage);
         };
     }
 
     private Message createMessage(ChatMessage chatMessage) {
-        Integer threadName = Integer.parseInt(Thread.currentThread().getName());
-        IdGenerator idGenerator = IdGeneratorMap.idGeneratorMap.get(threadName);
+        IdGenerator idGenerator = idGeneratorManager.getIdGenerator();
         long messageId = idGenerator.nextId();
         int bucket = getBucket(messageId, idGenerator);
         return Message.createMessage(chatMessage.getChannelId(), bucket, messageId,

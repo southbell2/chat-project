@@ -24,7 +24,6 @@ public class ConsumerTaskService {
     private final StringRedisTemplate redisTemplate;
     private final ObjectMapper objectMapper;
 
-    @Async("consumerThreadPoolTaskExecutor")
     public void saveMessageInCassandra(Message message) {
         try {
             messageRepository.save(message);
@@ -33,7 +32,6 @@ public class ConsumerTaskService {
         }
     }
 
-    @Async("consumerThreadPoolTaskExecutor")
     public void publishRedis(ChatMessage chatMessage) {
         String subChannel = REDIS_CHANNEL_PREFIX + chatMessage.getChannelId();
         try {

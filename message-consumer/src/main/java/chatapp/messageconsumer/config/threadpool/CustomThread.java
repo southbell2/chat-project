@@ -1,5 +1,6 @@
 package chatapp.messageconsumer.config.threadpool;
 
+import chatapp.messageconsumer.id.ThreadNameQueue;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.util.threads.StopPooledThreadException;

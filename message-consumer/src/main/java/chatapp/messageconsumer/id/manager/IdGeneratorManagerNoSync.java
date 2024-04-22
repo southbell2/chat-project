@@ -1,14 +1,16 @@
-package demo.chatapp.id.manager;
+package chatapp.messageconsumer.id.manager;
 
-import demo.chatapp.id.IdGeneratorMap;
-import demo.chatapp.id.ThreadNameQueue;
-import demo.chatapp.id.generator.IdGenerator;
+import chatapp.messageconsumer.id.IdGeneratorMap;
+import chatapp.messageconsumer.id.ThreadNameQueue;
+import chatapp.messageconsumer.id.generator.IdGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component("nosync")
 @Profile("id-nosync")
+@Slf4j
 public class IdGeneratorManagerNoSync implements IdGeneratorManager{
 
     @Value("${server.tomcat.threads.max:200}")
