@@ -7,3 +7,4 @@ relay-log-purge=ON
 read_only
 log_slave_updates
 log-error=/var/log/mysql/error.log
+bind-address=0.0.0.0

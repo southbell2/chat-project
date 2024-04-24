@@ -4,3 +4,4 @@ gtid_mode=ON
 enforce-gtid-consistency=ON
 server-id=1111
 log-error=/var/log/mysql/error.log
+bind-address=0.0.0.0
