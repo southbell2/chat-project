@@ -1,0 +1,20 @@
+spring:
+  config:
+    activate:
+      on-profile: aws
+  datasource:
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://database-1.c1wc4gae6f5j.ap-northeast-2.rds.amazonaws.com:3306/chat
+      username: root
+      password: rootroot
+    slave:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://database-1.c1wc4gae6f5j.ap-northeast-2.rds.amazonaws.com:3306/chat
+      username: root
+      password: rootroot
+  data:
+    redis:
+      host: chat-app-redis-jz1ced.serverless.apn2.cache.amazonaws.com
+      port: 6379
+    ssl: true

@@ -2,19 +2,18 @@ spring:
   profiles:
     group:
       default: id-nosync
-
+      aws: id-nosync
   datasource:
     master:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://host.docker.internal:3306/chat
+      jdbc-url: jdbc:mysql://localhost:3306/chat
       username: root
       password: root
     slave:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://host.docker.internal:3307/chat
+      jdbc-url: jdbc:mysql://localhost:3307/chat
       username: root
       password: root
-
   jpa:
     hibernate:
       ddl-auto: none
@@ -29,9 +28,6 @@ spring:
     redis:
       host: host.docker.internal
       port: 6379
-
-
-
 jwt:
   secret-key: jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4
   token-validity-in-sec: 300
@@ -44,9 +40,8 @@ admin:
   ip: 127.0.0.1
 
 cassandra:
-  contact-point: host.docker.internal
+  contact-point: localhost
   port: 9042
   local-datacenter: datacenter1
   keyspace: chat
-
 

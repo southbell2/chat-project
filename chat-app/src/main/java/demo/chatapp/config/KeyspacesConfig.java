@@ -1,23 +1,16 @@
-package chatapp.messageconsumer.config;
-
+package demo.chatapp.config;
 
 import com.datastax.oss.driver.api.core.CqlSession;
-import java.net.InetSocketAddress;
+import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("!aws")
-public class CassandraConfig {
+@Profile("aws")
+public class KeyspacesConfig {
 
-    @Value("${cassandra.contact-point}")
-    private String contactPoint;
-    @Value("${cassandra.port}")
-    private int port;
-    @Value("${cassandra.local-datacenter}")
-    private String localDataCenter;
     @Value("${cassandra.keyspace}")
     private String keyspace;
 
@@ -25,8 +18,8 @@ public class CassandraConfig {
     public CqlSession session() {
         return CqlSession.builder()
             .withKeyspace(keyspace)
-            .addContactPoint(new InetSocketAddress(contactPoint, port))
-            .withLocalDatacenter(localDataCenter)
+            .withConfigLoader(DriverConfigLoader.fromClasspath("keyspaces-application.conf"))
             .build();
     }
+
 }
