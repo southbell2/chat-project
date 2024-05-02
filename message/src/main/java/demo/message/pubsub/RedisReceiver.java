@@ -1,4 +1,4 @@
-package demo.message.config;
+package demo.message.pubsub;
 
 import static demo.message.constant.ChannelConstant.SUB_CHANNEL_URL;
 

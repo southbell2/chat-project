@@ -1,5 +1,6 @@
 package demo.message.config;
 
+import demo.message.pubsub.RedisReceiver;
 import io.lettuce.core.ClientOptions;
 import io.lettuce.core.SslOptions;
 import io.lettuce.core.protocol.ProtocolVersion;
