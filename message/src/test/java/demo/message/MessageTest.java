@@ -28,7 +28,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ActiveProfiles("test")
+@ActiveProfiles({"test", "local"})
 public class MessageTest extends AbstractContainerEnv {
 
     static WebSocketStompClient stompClient = new WebSocketStompClient(new StandardWebSocketClient());
@@ -65,19 +65,21 @@ public class MessageTest extends AbstractContainerEnv {
         List<ChatMessage> list2 = new ArrayList<>();
         subscribe(stompSession2, list2);
 
+        //when
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setNickname(nickname1);
         chatMessage.setChannelId(channelId);
-
-        //when
         stompSession1.send("/pub/join", chatMessage);
+        chatMessage.setNickname(nickname2);
+        chatMessage.setChannelId(channelId);
+        stompSession2.send("/pub/join", chatMessage);
         Thread.sleep(1000);
-        ChatMessage retMessage = list2.get(0);
+        ChatMessage retMessage = list1.get(1);
 
         //then
         assertThat(retMessage.getMessageType()).isEqualTo(MessageType.JOIN);
         assertThat(retMessage.getChannelId()).isEqualTo(channelId);
-        assertThat(retMessage.getNickname()).isEqualTo(nickname1);
+        assertThat(retMessage.getNickname()).isEqualTo(nickname2);
         assertThat(retMessage.getContent()).isEqualTo(retMessage.getNickname() + "님이 입장하셨습니다.");
     }
 
