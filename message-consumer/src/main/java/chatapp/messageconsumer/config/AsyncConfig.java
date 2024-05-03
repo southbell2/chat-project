@@ -1,9 +1,14 @@
 package chatapp.messageconsumer.config;
 
+import chatapp.messageconsumer.config.threadpool.CustomThreadFactory;
 import java.util.concurrent.Executor;
-import org.springframework.beans.factory.annotation.Value;
+import java.util.concurrent.TimeUnit;
+import org.apache.tomcat.util.threads.TaskQueue;
+import org.apache.tomcat.util.threads.ThreadPoolExecutor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -11,17 +16,27 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableAsync
 public class AsyncConfig {
 
-    @Value("${server.tomcat.threads.max:200}")
-    private int maxThreadPoolSize;
-    @Value("${server.tomcat.threads.min-spare:10}")
-    private int threadPoolCoreSize;
+    public static final int CORE_POOL_SIZE = 10;
+    public static final int MAXIMUM_POOL_SIZE = 200;
 
     @Bean(name = "consumerThreadPoolTaskExecutor")
-    public Executor consumerThreadPoolTaskExecutor() {
+    @DependsOn("nosync")
+    @Profile("id-nosync")
+    public Executor idNoSyncThreadPoolExecutor() {
+        TaskQueue taskQueue = new TaskQueue();
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+            60, TimeUnit.SECONDS, taskQueue, new CustomThreadFactory(true, Thread.NORM_PRIORITY));
+        taskQueue.setParent((ThreadPoolExecutor) executor);
+        return executor;
+    }
+
+    @Bean(name = "consumerThreadPoolTaskExecutor")
+    @Profile("id-original")
+    public Executor idOriginalThreadPoolExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(threadPoolCoreSize);
-        executor.setMaxPoolSize(maxThreadPoolSize);
-        executor.setQueueCapacity(20);
+        executor.setCorePoolSize(CORE_POOL_SIZE);
+        executor.setMaxPoolSize(MAXIMUM_POOL_SIZE);
+        executor.setQueueCapacity(10);
         executor.setThreadNamePrefix("Consumer Task-");
         return executor;
     }

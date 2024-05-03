@@ -1,10 +1,11 @@
 package chatapp.messageconsumer.id.manager;
 
+import static chatapp.messageconsumer.config.AsyncConfig.MAXIMUM_POOL_SIZE;
+
 import chatapp.messageconsumer.id.IdGeneratorMap;
 import chatapp.messageconsumer.id.ThreadNameQueue;
 import chatapp.messageconsumer.id.generator.IdGenerator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -13,13 +14,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class IdGeneratorManagerNoSync implements IdGeneratorManager{
 
-    @Value("${server.tomcat.threads.max:200}")
-    private int maxThreadPoolSize;
-    @Value("${server.tomcat.threads.min-spare:10}")
-    private int threadPoolCoreSize;
-
     public IdGeneratorManagerNoSync() {
-        int maxThreadName = ThreadNameQueue.initQueue(maxThreadPoolSize);
+        int maxThreadName = ThreadNameQueue.initQueue(MAXIMUM_POOL_SIZE);
         IdGeneratorMap.initMap(maxThreadName);
     }
 

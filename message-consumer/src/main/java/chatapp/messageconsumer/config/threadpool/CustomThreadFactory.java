@@ -1,13 +1,9 @@
 package chatapp.messageconsumer.config.threadpool;
 
 import chatapp.messageconsumer.id.ThreadNameQueue;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Objects;
 import java.util.concurrent.ThreadFactory;
-import org.apache.tomcat.util.security.PrivilegedSetAccessControlContext;
-import org.apache.tomcat.util.security.PrivilegedSetTccl;
-import org.apache.tomcat.util.threads.Constants;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class CustomThreadFactory implements ThreadFactory {
@@ -18,35 +14,16 @@ public class CustomThreadFactory implements ThreadFactory {
 
     @Autowired
     public CustomThreadFactory(boolean daemon, int priority) {
-        SecurityManager s = System.getSecurityManager();
-        group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+        group = Thread.currentThread().getThreadGroup();
         this.daemon = daemon;
         this.threadPriority = priority;
     }
 
     @Override
-    public Thread newThread(Runnable r) {
+    public Thread newThread(@NotNull Runnable r) {
         Thread t = makeCustomThread(r);
-
         t.setDaemon(daemon);
         t.setPriority(threadPriority);
-
-        if (Constants.IS_SECURITY_ENABLED) {
-            // Set the context class loader of newly created threads to be the
-            // class loader that loaded this factory. This avoids retaining
-            // references to web application class loaders and similar.
-            PrivilegedAction<Void> pa = new PrivilegedSetTccl(
-                t, getClass().getClassLoader());
-            AccessController.doPrivileged(pa);
-
-            // This method may be triggered from an InnocuousThread. Ensure that
-            // the thread inherits an appropriate AccessControlContext
-            pa = new PrivilegedSetAccessControlContext(t);
-            AccessController.doPrivileged(pa);
-        } else {
-            t.setContextClassLoader(getClass().getClassLoader());
-        }
-
         return t;
     }
 
