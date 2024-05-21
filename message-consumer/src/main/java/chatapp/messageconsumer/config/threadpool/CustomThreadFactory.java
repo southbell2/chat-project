@@ -3,7 +3,6 @@ package chatapp.messageconsumer.config.threadpool;
 import chatapp.messageconsumer.id.ThreadNameQueue;
 import java.util.Objects;
 import java.util.concurrent.ThreadFactory;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class CustomThreadFactory implements ThreadFactory {
@@ -20,7 +19,7 @@ public class CustomThreadFactory implements ThreadFactory {
     }
 
     @Override
-    public Thread newThread(@NotNull Runnable r) {
+    public Thread newThread(Runnable r) {
         Thread t = makeCustomThread(r);
         t.setDaemon(daemon);
         t.setPriority(threadPriority);

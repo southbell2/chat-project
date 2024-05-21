@@ -5,7 +5,6 @@ import io.lettuce.core.ClientOptions;
 import io.lettuce.core.SslOptions;
 import io.lettuce.core.protocol.ProtocolVersion;
 import io.lettuce.core.resource.ClientResources;
-import io.micrometer.observation.ObservationRegistry;
 import java.io.File;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,21 +14,11 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration.LettuceClientConfigurationBuilder;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.observability.MicrometerTracingAdapter;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
 @Configuration
 public class RedisConfig {
-
-    //메트릭 등록
-    @Bean
-    public ClientResources clientResources(ObservationRegistry observationRegistry) {
-
-        return ClientResources.builder()
-            .tracing(new MicrometerTracingAdapter(observationRegistry, "redis-cache"))
-            .build();
-    }
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(

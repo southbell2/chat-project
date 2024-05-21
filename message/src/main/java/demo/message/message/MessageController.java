@@ -21,7 +21,7 @@ public class MessageController {
     public void sendMessage(@Payload ChatMessage chatMessage) {
         chatMessage.setCreatedAt(LocalDateTime.now());
         chatMessage.setMessageType(MessageType.CHAT);
-        log.info("send message = {}", chatMessage.toString());
+        log.info("send message = {}", chatMessage);
         messageService.sendMessage(chatMessage);
     }
 
@@ -29,7 +29,7 @@ public class MessageController {
     public void joinChannel(@Payload ChatMessage chatMessage) {
         Objects.requireNonNull(chatMessage, "chatMessage는 null이면 안 됩니다.");
         createJoinMessage(chatMessage);
-        log.info("join message = {}", chatMessage.toString());
+        log.info("join message = {}", chatMessage);
         messageService.joinChannel(chatMessage);
     }
 
@@ -39,6 +39,12 @@ public class MessageController {
         createLeaveMessage(chatMessage);
         log.info("leave message = {}", chatMessage.toString());
         messageService.leaveChannel(chatMessage);
+    }
+
+    @GetMapping("/hello")
+    public ResponseEntity<?> test() {
+        log.info("test hello world");
+        return ResponseEntity.ok("hello world!");
     }
 
     private void createJoinMessage(ChatMessage chatMessage) {
