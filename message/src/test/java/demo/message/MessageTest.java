@@ -70,6 +70,7 @@ public class MessageTest extends AbstractContainerEnv {
         chatMessage.setNickname(nickname1);
         chatMessage.setChannelId(channelId);
         stompSession1.send("/pub/join", chatMessage);
+        Thread.sleep(1000);
         chatMessage.setNickname(nickname2);
         chatMessage.setChannelId(channelId);
         stompSession2.send("/pub/join", chatMessage);

@@ -37,7 +37,8 @@ public class AsyncConfig {
         executor.setCorePoolSize(CORE_POOL_SIZE);
         executor.setMaxPoolSize(MAXIMUM_POOL_SIZE);
         executor.setQueueCapacity(10);
-        executor.setThreadNamePrefix("Consumer Task-");
+        executor.setThreadNamePrefix("Consumer Task - ");
+        executor.setDaemon(true);
         return executor;
     }
 

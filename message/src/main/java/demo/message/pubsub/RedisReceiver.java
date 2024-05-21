@@ -23,7 +23,7 @@ public class RedisReceiver {
             ChatMessage chatMessage = objectMapper.readValue(messageJson, ChatMessage.class);
             messageSendingOperations.convertAndSend(SUB_CHANNEL_URL + chatMessage.getChannelId(),
                 chatMessage);
-            log.info("Send message to client, message = {}", chatMessage.toString());
+            log.info("Sent message to client, message = {}", chatMessage.toString());
         } catch (JsonProcessingException e) {
             log.error("JsonProcessingException = {}", e.getMessage());
         }

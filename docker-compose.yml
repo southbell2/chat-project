@@ -49,3 +49,7 @@ services:
     ports:
       - 9042:9042
 
+  # zipkin:
+  #   image: openzipkin/zipkin-slim
+  #   ports:
+  #    - 9411:9411
