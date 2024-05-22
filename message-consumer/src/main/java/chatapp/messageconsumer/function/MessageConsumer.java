@@ -15,10 +15,7 @@ public class MessageConsumer {
 
     @Bean
     public Consumer<ChatMessage> consume(ConsumerTaskService service) {
-        return chatMessage -> {
-            service.publishRedis(chatMessage);
-            service.saveMessageInCassandra(chatMessage);
-        };
+        return service::processingMessage;
     }
 
 }

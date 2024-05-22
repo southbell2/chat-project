@@ -19,4 +19,5 @@ public class ChatMessage {
     private String content;
     private MessageType messageType;
     private LocalDateTime createdAt;
+    private Long MessageId;
 }

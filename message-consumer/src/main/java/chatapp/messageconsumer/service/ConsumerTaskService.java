@@ -29,27 +29,40 @@ public class ConsumerTaskService {
     private final IdGeneratorManager idGeneratorManager;
 
     @Async("consumerThreadPoolTaskExecutor")
-    public void saveMessageInCassandra(ChatMessage chatMessage) {
+    public void processingMessage(ChatMessage chatMessage) {
+        log.info("[ID]start creating messageId");
         Message message = createMessage(chatMessage);
-        try {
-            messageRepository.save(message);
-            log.info("saveMessageInCassandra message = {}", message.toString());
-        } catch (DataAccessException e) {
-            log.error("Error Message = {} , Message = {}", e.getMessage(), message.toString());
-        }
+        log.info("[ID]finish creating messageId");
+        chatMessage.setMessageId(message.getMessageKey().getMessageId());
+
+        log.info("[PUB]start publishing message");
+        publishMessageToRedis(chatMessage);
+        log.info("[PUB]finish publishing message");
+
+        log.info("[PUB]messageId = {}", chatMessage.getMessageId());
+
+        log.info("[SAVE]start saving message");
+        saveMessageInCassandra(message);
+        log.info("[SAVE]finish saving message");
     }
 
-    @Async("consumerThreadPoolTaskExecutor")
-    public void publishRedis(ChatMessage chatMessage) {
+    private void publishMessageToRedis(ChatMessage chatMessage) {
         String subChannel = REDIS_CHANNEL_PREFIX + chatMessage.getChannelId();
         try {
             String messageJson = objectMapper.writeValueAsString(chatMessage);
             redisTemplate.convertAndSend(subChannel, messageJson);
-            log.info("publishRedis messageJson = {}", messageJson);
         } catch (JsonProcessingException e) {
             log.error("Error Message = {}", e.getMessage());
         } catch (RedisException e) {
-            log.error("Error Message = {} , Message = {}", e.getMessage(), chatMessage.toString());
+            log.error("Error Message = {} , Message = {}", e.getMessage(), chatMessage);
+        }
+    }
+
+    private void saveMessageInCassandra(Message message) {
+        try {
+            messageRepository.save(message);
+        } catch (DataAccessException e) {
+            log.error("Error Message = {} , Message = {}", e.getMessage(), message);
         }
     }
 

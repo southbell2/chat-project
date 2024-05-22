@@ -19,26 +19,29 @@ public class MessageController {
 
     @MessageMapping("/send")
     public void sendMessage(@Payload ChatMessage chatMessage) {
+        log.info("[SEND]start sending message");
         chatMessage.setCreatedAt(LocalDateTime.now());
         chatMessage.setMessageType(MessageType.CHAT);
-        log.info("send message = {}", chatMessage);
         messageService.sendMessage(chatMessage);
+        log.info("[SEND]finish sending message");
     }
 
     @MessageMapping("/join")
     public void joinChannel(@Payload ChatMessage chatMessage) {
+        log.info("[JOIN]start joining channel");
         Objects.requireNonNull(chatMessage, "chatMessage는 null이면 안 됩니다.");
         createJoinMessage(chatMessage);
-        log.info("join message = {}", chatMessage);
         messageService.joinChannel(chatMessage);
+        log.info("[JOIN]finish joining channel");
     }
 
     @MessageMapping("/leave")
     public void leaveChannel(@Payload ChatMessage chatMessage) {
+        log.info("[LEAVE]start leaving channel");
         Objects.requireNonNull(chatMessage, "chatMessage는 null이면 안 됩니다.");
         createLeaveMessage(chatMessage);
-        log.info("leave message = {}", chatMessage.toString());
         messageService.leaveChannel(chatMessage);
+        log.info("[LEAVE]finish leaving channel");
     }
 
     @GetMapping("/hello")
