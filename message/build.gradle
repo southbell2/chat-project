@@ -49,6 +49,8 @@ dependencies {
 	// spring-cloud-stream-binder-kafka
 	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
 
+	implementation 'software.amazon.msk:aws-msk-iam-auth:2.0.3'
+
 
 	// jackson-databind
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.4'

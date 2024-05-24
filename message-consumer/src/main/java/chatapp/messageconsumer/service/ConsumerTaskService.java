@@ -34,7 +34,7 @@ public class ConsumerTaskService {
         Message message = createMessage(chatMessage);
         log.info("[ID]finish creating messageId");
         chatMessage.setMessageId(message.getMessageKey().getMessageId());
-
+        log.info("[MSG]ChatMessage = {}", chatMessage);
         log.info("[PUB]start publishing message");
         publishMessageToRedis(chatMessage);
         log.info("[PUB]finish publishing message");

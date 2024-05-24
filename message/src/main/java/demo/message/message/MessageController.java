@@ -22,6 +22,7 @@ public class MessageController {
         log.info("[SEND]start sending message");
         chatMessage.setCreatedAt(LocalDateTime.now());
         chatMessage.setMessageType(MessageType.CHAT);
+        log.info("[SEND]ChatMessage = {}", chatMessage);
         messageService.sendMessage(chatMessage);
         log.info("[SEND]finish sending message");
     }
@@ -31,6 +32,7 @@ public class MessageController {
         log.info("[JOIN]start joining channel");
         Objects.requireNonNull(chatMessage, "chatMessage는 null이면 안 됩니다.");
         createJoinMessage(chatMessage);
+        log.info("[JOIN]ChatMessage = {}", chatMessage);
         messageService.joinChannel(chatMessage);
         log.info("[JOIN]finish joining channel");
     }
@@ -40,6 +42,7 @@ public class MessageController {
         log.info("[LEAVE]start leaving channel");
         Objects.requireNonNull(chatMessage, "chatMessage는 null이면 안 됩니다.");
         createLeaveMessage(chatMessage);
+        log.info("[LEAVE]ChatMessage = {}", chatMessage);
         messageService.leaveChannel(chatMessage);
         log.info("[LEAVE]finish leaving channel");
     }
