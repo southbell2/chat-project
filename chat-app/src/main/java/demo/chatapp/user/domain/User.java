@@ -52,7 +52,7 @@ public class User {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    @BatchSize(size = 5)
+    @BatchSize(size = 10)
     private List<UserRole> userRoles = new ArrayList<>();
 
     public void setUserRoles(List<UserRole> userRoles) {

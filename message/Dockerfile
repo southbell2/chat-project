@@ -8,4 +8,4 @@ COPY src/main/resources/redis.jks redis.jks
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","/message.jar","--spring.profiles.active=aws"]
+ENTRYPOINT ["java","-Xms4g","-Xmx6g","-jar","/message.jar","--spring.profiles.active=aws"]

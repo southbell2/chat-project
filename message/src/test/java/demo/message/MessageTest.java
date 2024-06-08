@@ -54,9 +54,9 @@ public class MessageTest extends AbstractContainerEnv {
     void 채널_입장하기() throws ExecutionException, InterruptedException, TimeoutException {
         //given
         //웹소켓 연결
-        StompSession stompSession1 = stompClient.connectAsync(url, new StompSessionHandlerAdapter() {
+        StompSession stompSession1 = stompClient.connect(url, new StompSessionHandlerAdapter() {
         }).get(2, TimeUnit.SECONDS);
-        StompSession stompSession2 = stompClient.connectAsync(url, new StompSessionHandlerAdapter() {
+        StompSession stompSession2 = stompClient.connect(url, new StompSessionHandlerAdapter() {
         }).get(2, TimeUnit.SECONDS);
 
         List<ChatMessage> list1 = new ArrayList<>();
@@ -70,11 +70,11 @@ public class MessageTest extends AbstractContainerEnv {
         chatMessage.setNickname(nickname1);
         chatMessage.setChannelId(channelId);
         stompSession1.send("/pub/join", chatMessage);
-        Thread.sleep(1000);
+        Thread.sleep(3000);
         chatMessage.setNickname(nickname2);
         chatMessage.setChannelId(channelId);
         stompSession2.send("/pub/join", chatMessage);
-        Thread.sleep(1000);
+        Thread.sleep(3000);
         ChatMessage retMessage = list1.get(1);
 
         //then
@@ -88,11 +88,11 @@ public class MessageTest extends AbstractContainerEnv {
     void 채널_퇴장하기() throws ExecutionException, InterruptedException, TimeoutException {
         //given
         //3개의 웹소켓 연결
-        StompSession stompSession1 = stompClient.connectAsync(url, new StompSessionHandlerAdapter() {
+        StompSession stompSession1 = stompClient.connect(url, new StompSessionHandlerAdapter() {
         }).get(2, TimeUnit.SECONDS);
-        StompSession stompSession2 = stompClient.connectAsync(url, new StompSessionHandlerAdapter() {
+        StompSession stompSession2 = stompClient.connect(url, new StompSessionHandlerAdapter() {
         }).get(2, TimeUnit.SECONDS);
-        StompSession stompSession3 = stompClient.connectAsync(url, new StompSessionHandlerAdapter() {
+        StompSession stompSession3 = stompClient.connect(url, new StompSessionHandlerAdapter() {
         }).get(2, TimeUnit.SECONDS);
         List<ChatMessage> list1 = new ArrayList<>();
         List<ChatMessage> list2 = new ArrayList<>();

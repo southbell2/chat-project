@@ -11,6 +11,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,9 +27,7 @@ public class MessageService {
     public void joinChannel(ChatMessage chatMessage) {
         //채널을 입장하면 redis에 채널을 구독하고 채널의 다른 회원들에게 입장 메세지를 보낸다.
         Long channelId = chatMessage.getChannelId();
-        log.info("[SUB]start subscription");
         redisSubManager.subIfNecessary(channelId);
-        log.info("[SUB]finish subscription");
 
         String subChannel = REDIS_CHANNEL_PREFIX + channelId;
         try {
@@ -42,9 +41,7 @@ public class MessageService {
     public void leaveChannel(ChatMessage chatMessage) {
         //채널을 퇴장하면 redis에 채널 구독을 끊고 채널의 다른 회원들에게 퇴장 메세지를 보낸다.
         Long channelId = chatMessage.getChannelId();
-        log.info("[SUB]start unsubscription");
         redisSubManager.unSubIfNecessary(channelId);
-        log.info("[SUB]finish unsubscription");
 
         String subChannel = REDIS_CHANNEL_PREFIX + channelId;
         try {
@@ -55,6 +52,7 @@ public class MessageService {
         }
     }
 
+    @Async("sendingMessageThreadPoolTaskExecutor")
     public void sendMessage(ChatMessage chatMessage) {
         Message<ChatMessage> message = MessageBuilder.withPayload(chatMessage)
             .setHeader("partitionKey", chatMessage.getChannelId())
