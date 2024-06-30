@@ -109,6 +109,7 @@ PRIMARY KEY ((channel_id, bucket), message_id)) WITH CLUSTERING ORDER BY (messag
 * Redis Pub/Sub을 사용해 채널에 입장해 있는 회원에게 메시지를 전달
 * 통합된 테스트 환경 구축을 위해 Testcontainers 사용
 * 분산 환경을 위해 snowflake id를 사용
+* zipkin, prometheus, grafana, cloudwatch를 사용해 모니터링
 
 -------------------------
 
