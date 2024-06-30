@@ -119,6 +119,7 @@ PRIMARY KEY ((channel_id, bucket), message_id)) WITH CLUSTERING ORDER BY (messag
 * 테스트 목표 : 초당 약 3000개의 메세지를 1000ms(1s)이내에 주고 받기
 * 3000개의 쓰레드(유저)로 Ramp-up 15분 Duration 15분 총 30분 테스트
 * 4vCPU, 8GM 메모리의 EC2 인스턴스를 Message 서버 3개, Message-Consumer 서버 3개 실행한다
+* 테스트중 생긴 문제 및 해결 등 더 자세한 정보는 https://lightning-swan-64e.notion.site/5f85da7141ef4ad098f520aae3cb2a91?pvs=4 에서 확인 가능
 
 ## 결과
 <img src="https://github.com/southbell2/chat-project/blob/master/images/test-1.png" width="600" height="250">
