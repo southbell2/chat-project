@@ -27,7 +27,7 @@
 
 시스템 아키텍쳐
 ============
-<img src="https://github.com/southbell2/chat-project/blob/master/images/chat-architecture.jpg" width="700" height="600">
+<img src="https://github.com/southbell2/chat-project/blob/master/images/aws-chat-architecture.jpg" width="900" height="600">
 
 1. Chat-App : 회원 기능, 채널 기능 등 채팅 메시지 송수신 이외의 기능들을 담당한다.
 2. MySQL : 회원, 채팅방, 채팅방에 입장한 회원 데이터를 저장한다.
@@ -104,9 +104,22 @@ PRIMARY KEY ((channel_id, bucket), message_id)) WITH CLUSTERING ORDER BY (messag
 * 대용량의 메시지 데이터 저장을 위해 확장성과 가용성이 뛰어난 카산드라 데이터베이스 사용
 * 카산드라의 특정 노드에만 데이터가 너무 많이 저장되는 것을 방지하기 위해 partition key는 channel_id와 일정 시간마다 증가하는 bucket으로 구성
 * 성능을 고려해 MySQL의 스키마 설계
+* 실행계획으로 MySQL의 SELECT 쿼리가 인덱스를 제대로 활용하는지 확인
 * 추후 확장성을 고려해 메시지를 이벤트로 발행
 * Redis Pub/Sub을 사용해 채널에 입장해 있는 회원에게 메시지를 전달
 * 통합된 테스트 환경 구축을 위해 Testcontainers 사용
 * 분산 환경을 위해 snowflake id를 사용
-* snowflake 성능 개선을 위해 Thread bit 도입해서 id 생성시 데이터 동기화를 위한 락을 최소화 성능 약 10~20% 상승 (아래 이미지 참조)
-<img src="https://github.com/southbell2/chat-project/blob/master/images/performance-test.jpg" width="800" height="60">
+
+-------------------------
+
+부하 테스트
+================
+* 테스트 러너 : Jmeter
+* 테스트 플랫폼 : RedLine13
+* 테스트 목표 : 초당 약 3000개의 메세지를 1000ms(1s)이내에 주고 받기
+* 3000개의 쓰레드(유저)로 Ramp-up 15분 Duration 15분 총 30분 테스트
+* 4vCPU, 8GM 메모리의 EC2 인스턴스를 Message 서버 3개, Message-Consumer 서버 3개 실행한다
+
+## 결과
+<img src="https://github.com/southbell2/chat-project/blob/master/images/test-1.png" width="600" height="250">
+<img src="https://github.com/southbell2/chat-project/blob/master/images/test-2.png" width="800" height="500">
