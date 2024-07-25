@@ -103,8 +103,7 @@ PRIMARY KEY ((channel_id, bucket), message_id)) WITH CLUSTERING ORDER BY (messag
 * MySQL에서 페이징 쿼리 최적화
 * 대용량의 메시지 데이터 저장을 위해 확장성과 가용성이 뛰어난 카산드라 데이터베이스 사용
 * 카산드라의 특정 노드에만 데이터가 너무 많이 저장되는 것을 방지하기 위해 partition key는 channel_id와 일정 시간마다 증가하는 bucket으로 구성
-* 성능을 고려해 MySQL의 스키마 설계
-* 실행계획으로 MySQL의 SELECT 쿼리가 인덱스를 제대로 활용하는지 확인
+* 실행계획으로 쿼리들이 인덱스를 제대로 활용하는지 확인
 * 추후 확장성을 고려해 메시지를 이벤트로 발행
 * Redis Pub/Sub을 사용해 채널에 입장해 있는 회원에게 메시지를 전달
 * 통합된 테스트 환경 구축을 위해 Testcontainers 사용
