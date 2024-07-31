@@ -3,6 +3,7 @@ package demo.chatapp.user.service;
 import static demo.chatapp.user.domain.RoleType.ROLE_ADMIN;
 import static demo.chatapp.user.domain.RoleType.ROLE_USER;
 
+import demo.chatapp.exception.BadRequestException;
 import demo.chatapp.user.UserMapper;
 import demo.chatapp.user.domain.RoleType;
 import demo.chatapp.user.domain.User;
@@ -39,7 +40,7 @@ public class AdminService {
     }
 
     public UserInfoAdminResponse getUserInfoByAdmin(Long userId) {
-        User user = userRepository.findByIdWithRole(userId).orElseThrow();
+        User user = userRepository.findByIdWithRole(userId).orElseThrow(() -> new BadRequestException("회원 ID를 찾을 수 없습니다."));
         List<RoleType> roles = user.getUserRoles().stream()
             .map(UserRole::getRole)
             .toList();

@@ -7,6 +7,7 @@ import demo.chatapp.channel.repository.EntryRepository;
 import demo.chatapp.channel.service.dto.ChannelInfoResponse;
 import demo.chatapp.channel.service.dto.JoinChannelResponse;
 import demo.chatapp.channel.service.dto.MessageResponse;
+import demo.chatapp.exception.BadRequestException;
 import demo.chatapp.id.Bucket;
 import demo.chatapp.id.IdGeneratorMap;
 import demo.chatapp.id.generator.IdGeneratorNoSync;
@@ -42,7 +43,7 @@ public class ChannelService {
     public long createChannel(String title, Long masterId) {
         //채널 생성
         long id = idGeneratorManager.getIdGenerator().nextId();
-        User user = userRepository.findById(masterId).orElseThrow();
+        User user = userRepository.findById(masterId).orElseThrow(() -> new BadRequestException("회원 ID를 찾을 수 없습니다."));
         Channel channel = Channel.createChannel(id, title, user);
         channelRepository.save(channel);
 
@@ -55,7 +56,7 @@ public class ChannelService {
     @Transactional
     public JoinChannelResponse joinChannel(Long channelId, Long userId) {
         Channel channel = channelRepository.findByIdWithEntriesWithUser(channelId).orElseThrow();
-        User user = userRepository.findById(userId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow(() -> new BadRequestException("회원 ID를 찾을 수 없습니다."));
 
         //entry(채널에 입장한 회원 기록) 저장
         makeEntry(channel, user);
@@ -75,7 +76,7 @@ public class ChannelService {
     @Transactional
     public void leaveChannel(Long channelId, Long userId) {
         entryRepository.deleteByChannelIdAndUserId(channelId, userId);
-        Channel channel = channelRepository.findById(channelId).orElseThrow();
+        Channel channel = channelRepository.findById(channelId).orElseThrow(() -> new BadRequestException("회원 ID를 찾을 수 없습니다."));
         //현재 남은 방의 인원이 혼자 밖에 없으면 채널을 삭제하고 그게 아닐시 인원수를 1 줄인다.
         if (channel.getTotalCount() <= 1) {
             channelRepository.delete(channel);

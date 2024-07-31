@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import demo.chatapp.AbstractContainerEnv;
+import demo.chatapp.exception.BadRequestException;
 import demo.chatapp.exception.UnauthorizedException;
 import demo.chatapp.user.domain.User;
 import demo.chatapp.user.repository.UserRepository;
@@ -12,10 +13,8 @@ import demo.chatapp.user.service.dto.UpdatePasswordRequest;
 import demo.chatapp.user.service.dto.UpdateUserInfoRequest;
 import demo.chatapp.user.service.dto.UserInfoResponse;
 import jakarta.persistence.EntityManager;
-import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -98,7 +97,7 @@ class UserServiceTest extends AbstractContainerEnv {
 
         //when && then
         assertThatThrownBy(() -> userService.getUserInfo(id))
-            .isInstanceOf(NoSuchElementException.class);
+            .isInstanceOf(BadRequestException.class);
     }
 
     @Test
@@ -193,6 +192,6 @@ class UserServiceTest extends AbstractContainerEnv {
 
         //then
         assertThatThrownBy(() -> userService.getUserInfo(user.getId()))
-            .isInstanceOf(NoSuchElementException.class);
+            .isInstanceOf(BadRequestException.class);
     }
 }

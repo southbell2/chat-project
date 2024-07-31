@@ -1,5 +1,6 @@
 package demo.chatapp.user.service;
 
+import demo.chatapp.exception.BadRequestException;
 import demo.chatapp.user.UserMapper;
 import demo.chatapp.user.domain.RoleType;
 import demo.chatapp.user.domain.User;
@@ -33,7 +34,7 @@ public class UserService {
 
     public UserInfoResponse getUserInfo(Long userId) {
         Optional<User> user = userRepository.findById(userId);
-        return userMapper.userToUserInfoResponse(user.orElseThrow());
+        return userMapper.userToUserInfoResponse(user.orElseThrow(() -> new BadRequestException("회원 ID를 찾을 수 없습니다.")));
     }
 
     @Transactional
@@ -44,13 +45,13 @@ public class UserService {
     @Transactional
     public void updateUserInfo(Long userId, UpdateUserInfoRequest userInfoRequest) {
         Optional<User> user = userRepository.findById(userId);
-        user.orElseThrow().updateUserInfo(userInfoRequest);
+        user.orElseThrow(() -> new BadRequestException("회원 ID를 찾을 수 없습니다.")).updateUserInfo(userInfoRequest);
     }
 
     @Transactional
     public void updatePassword(Long userId, UpdatePasswordRequest updatePasswordRequest) {
         Optional<User> user = userRepository.findById(userId);
-        user.orElseThrow().updatePassword(updatePasswordRequest.getNewPassword(),
+        user.orElseThrow(() -> new BadRequestException("회원 ID를 찾을 수 없습니다.")).updatePassword(updatePasswordRequest.getNewPassword(),
             updatePasswordRequest.getNowPassword(), passwordEncoder);
     }
 }
