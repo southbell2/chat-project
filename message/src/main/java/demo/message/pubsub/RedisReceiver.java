@@ -8,7 +8,6 @@ import demo.message.message.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,7 +24,7 @@ public class RedisReceiver {
             messageSendingOperations.convertAndSend(SUB_CHANNEL_URL + chatMessage.getChannelId(),
                 chatMessage);
         } catch (JsonProcessingException e) {
-            log.error("JsonProcessingException = {}", e.getMessage());
+            log.error("[ERROR} JsonProcessing 예외, msg = {}, ex = {}", messageJson, e);
         }
     }
 }

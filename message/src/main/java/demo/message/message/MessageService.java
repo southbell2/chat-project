@@ -11,7 +11,6 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,7 +33,9 @@ public class MessageService {
             String messageJson = objectMapper.writeValueAsString(chatMessage);
             redisTemplate.convertAndSend(subChannel, messageJson);
         } catch (JsonProcessingException e) {
-            log.error("JsonProcessingException = {}", e.getMessage());
+            log.error("[ERROR} JsonProcessing 예외, msg = {}, ex = {}",chatMessage, e);
+        } catch (Exception e) {
+            log.error("[ERROR]레디스로 JOIN 메세지 publish 중 에러 발생, msg = {}, ex = {}", chatMessage, e);
         }
     }
 
@@ -48,16 +49,21 @@ public class MessageService {
             String messageJson = objectMapper.writeValueAsString(chatMessage);
             redisTemplate.convertAndSend(subChannel, messageJson);
         } catch (JsonProcessingException e) {
-            log.error("JsonProcessingException = {}", e.getMessage());
+            log.error("[ERROR} JsonProcessing 예외, msg = {}, ex = {}",chatMessage, e);
+        } catch (Exception e) {
+            log.error("[ERROR]레디스로 LEAVE 메세지 publish 중 예외 발생, msg = {}, ex = {}", chatMessage, e);
         }
     }
 
-    @Async("sendingMessageThreadPoolTaskExecutor")
     public void sendMessage(ChatMessage chatMessage) {
         Message<ChatMessage> message = MessageBuilder.withPayload(chatMessage)
             .setHeader("partitionKey", chatMessage.getChannelId())
             .build();
-        streamBridge.send("output", message);
+        try {
+            streamBridge.send("output", message);
+        } catch (Exception e) {
+            log.error("[ERROR]카프카로 메세지 전송 중 예외 발생, msg = {}, ex = {}", chatMessage, e);
+        }
     }
 
 }

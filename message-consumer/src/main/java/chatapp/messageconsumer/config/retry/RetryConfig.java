@@ -1,9 +1,8 @@
-package chatapp.messageconsumer.config;
+package chatapp.messageconsumer.config.retry;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
-import org.springframework.retry.listener.RetryListenerSupport;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 
@@ -15,7 +14,7 @@ public class RetryConfig {
         RetryTemplate retryTemplate = new RetryTemplate();
 
         SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy();
-        retryPolicy.setMaxAttempts(2);
+        retryPolicy.setMaxAttempts(3);
 
         retryTemplate.setRetryPolicy(retryPolicy);
 
@@ -23,7 +22,7 @@ public class RetryConfig {
         backOffPolicy.setBackOffPeriod(1000);
         retryTemplate.setBackOffPolicy(backOffPolicy);
 
-        retryTemplate.registerListener(new RetryListenerSupport());
+        retryTemplate.registerListener(new CassandraRetryListener());
         return retryTemplate;
     }
 }
